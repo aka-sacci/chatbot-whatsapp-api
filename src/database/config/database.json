@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "root",
+    "password": "mortadela1",
+    "database": "database_farmanova_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "sqlite",
+    "password": "",
+    "database": "database_farmanova_test",
+    "host": "127.0.0.1",
+    "dialect": "sqlite",
+    "storage": "./src/database/database.sqlite" 
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_farmanova",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

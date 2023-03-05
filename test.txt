@@ -1,0 +1,20 @@
+  "compilerOptions": {
+    "target": "es2019", // target
+    "module": "commonjs", //nsei                            
+    "rootDir": "src", //Diretório root para a transpilação                             
+    "moduleResolution": "node", //modulos node?
+  
+    "typeRoots": [
+      "./src/@types",
+      "./node_modules/@types"
+    ],  //Config de tipos    
+  
+    "outDir": "./dist", //pra onde vai ao transpilar
+    "removeComments": true, //remove os coments da transpilação
+  
+    "esModuleInterop": true, //padrão
+    
+    "forceConsistentCasingInFileNames": true, //padrão
+    "strict": true, //padrão
+    "": true //padrão
+  }
