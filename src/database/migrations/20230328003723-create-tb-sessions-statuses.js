@@ -2,23 +2,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('tb_user', {
-      usid: {
-        type: Sequelize.STRING(20),
-        primaryKey: true,
-        allowNull: false
-      },
-      password: {
-        type: Sequelize.STRING(100),
-        allowNull: false
-      },
-      name: {
-        type: Sequelize.STRING(60),
-        allowNull: false
-      },
-      role: {
-        type: Sequelize.INTEGER,
+    await queryInterface.createTable('tb_sessions_statuses', {
+      id: {
         allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER(1)
+      },
+      description: {
+        type: Sequelize.STRING(25),
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +24,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('tb_user');
+    await queryInterface.dropTable('tb_sessions_statuses');
   }
 };

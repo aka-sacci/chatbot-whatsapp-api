@@ -7,7 +7,10 @@
     "dev": "ts-node-dev src/",
     "build": "tsc -p .",
     "start": "node ./",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "migrate": "npx sequelize-cli db:migrate",
+    "undo-migrate": "npx sequelize-cli db:migrate:undo:all",
+    "seed": "npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
