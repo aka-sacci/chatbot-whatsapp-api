@@ -25,6 +25,12 @@ module.exports = {
       description: 'Ended by contact',
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      id: 5,
+      description: 'On wait',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
   },
 
