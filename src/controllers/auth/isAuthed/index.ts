@@ -15,10 +15,12 @@ export default async function isAuthedController(req: Request, res: Response, ne
                 res.status(200).send()
                 break;
             case false:
+                res.clearCookie('JWT')
                 res.status(403).send()
                 break
         }
     } else {
+        res.clearCookie('JWT')
         res.status(401).send()
     }
 }

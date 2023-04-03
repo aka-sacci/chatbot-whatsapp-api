@@ -16,13 +16,12 @@ export default async function loginController(req: Request<{}, {}, iAuthRequestB
     switch (result.success) {
         case true:
             if (result.hasRows === true) {
-                const token = jwt.sign({ usid: usid },
+                const token = jwt.sign({ usid: usid, sessionID: result.sessionID },
                     process.env.JWT_SECRET,
-                    { expiresIn: '1h' }
+                    {}
                 )
                 res.status(200).cookie("JWT", token, {
                     path: "/",
-                    expires: new Date(Date.now() + 3600000),
                     httpOnly: true
                 }).send()
             } else {

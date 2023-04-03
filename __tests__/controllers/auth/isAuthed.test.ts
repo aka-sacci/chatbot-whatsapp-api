@@ -1,12 +1,21 @@
 import jwt from "jsonwebtoken";
 import 'dotenv/config'
 
+const { Sequelize } = require('sequelize');
+
+//Import database
+const db = require('../../../src/database/models')
+
+//import mocks
+import { sessionMockUp } from '../../../src/mocks/sessionMock'
+
 const request = require('supertest')
 const testServer = require("../../../src/server")
 
 describe('isAuthed (c)', () => {
     let token: string
     let expiredToken: string
+    let invalidToken: string
 
     //Response function
     const response = async (myToken: string | undefined) => {
@@ -24,22 +33,53 @@ describe('isAuthed (c)', () => {
         }
     }
 
-    beforeAll(async () => {
+    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
+        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
+    }
 
-        token = jwt.sign({ usid: "admin" },
+    const syncDB = async () => {
+        await db.sequelize.sync({ force: true })
+    }
+
+    const signTokens = () => {
+        token = jwt.sign({ usid: "admin", sessionID: 1 },
             String(process.env.JWT_SECRET),
-            { expiresIn: '10s' }
+            { expiresIn: '1m' }
         )
 
-        expiredToken = jwt.sign({ usid: "admin" },
+        invalidToken = jwt.sign({ usid: "admin", sessionID: 2 },
+            String(process.env.JWT_SECRET),
+            { expiresIn: '1m' }
+        )
+
+        expiredToken = jwt.sign({ usid: "expiredToken", sessionID: 3 },
             String(process.env.JWT_SECRET),
             { expiresIn: '1ms' }
         )
+    }
+
+    beforeAll(async () => {
+        await syncDB()
+        await bulkInsertSession(1, 1, 'admin', 1);
+        await bulkInsertSession(2, 2, 'admin', 0);
+        signTokens()
+    })
+
+    afterAll(async () => {
+        await db.tb_sessions.destroy({
+            truncate: true
+        });
+        db.sequelize.close();
     })
 
     it("should return status 200 with a valid token", async () => {
         const myResponse = await response(token)
         expect(myResponse.status).toBe(200)
+    })
+
+    it("should return status 403 with a valid token, but a expired session", async () => {
+        const myResponse = await response(expiredToken)
+        expect(myResponse.status).toBe(403)
     })
 
     it("should return status 403 with a expired token", async () => {

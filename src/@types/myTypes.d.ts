@@ -13,7 +13,8 @@ export interface iLoginParams {
 
 export interface iReturnValidateUser {
     isValid: boolean,
-    wrongInput: null | "password" | "usid"
+    wrongInput: null | "password" | "usid",
+    sessionID?: string
 }
 
 export interface iUser {
@@ -36,7 +37,8 @@ export interface iReturnObject {
     quoteData?: object | number,
     qtd?: object
     error?: Error,
-    wrongInput?: string | null
+    wrongInput?: string | null,
+    sessionID?: string | null
 }
 
 export interface iAuthRequestBody {

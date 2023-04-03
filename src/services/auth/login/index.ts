@@ -1,6 +1,7 @@
 import { iLoginParams, iReturnObject, iReturnValidateUser } from "../../../@types/myTypes";
 const bcrypt = require('bcrypt');
 const user = require('../../../database/models/').tb_user
+const session = require('../../../database/models/').tb_sessions
 
 export default async function login(params: iLoginParams) {
     const { usid, password } = params
@@ -15,6 +16,7 @@ export default async function login(params: iLoginParams) {
         else returnObject = {
             success: true,
             hasRows: true,
+            sessionID: isUserValid.sessionID
         }
         return returnObject
     } catch (err: any) {
@@ -36,22 +38,82 @@ async function validateUser(params: iLoginParams): Promise<iReturnValidateUser> 
             }
         })
         .then((queryResult: any) => {
-            if (queryResult === null) {
-                let returnValidateUser: iReturnValidateUser = {
-                    isValid: false,
-                    wrongInput: "usid"
+            return queryResult
+        })
+
+        .catch((err: Error) => {
+            const errorToBeThrown = new Error
+            errorToBeThrown.message = err.message
+            errorToBeThrown.name = err.name
+            throw errorToBeThrown
+        })
+
+    const returnObject: iReturnValidateUser = await defineReturnObject(result, usid, password)
+    return returnObject
+
+
+}
+
+
+async function defineReturnObject(result: any, usid: string, password: string): Promise<iReturnValidateUser> {
+    let returnValidateUser: iReturnValidateUser;
+    switch (result) {
+        case null:
+            returnValidateUser = {
+                isValid: false,
+                wrongInput: "usid"
+            }
+            return returnValidateUser
+        default:
+            let returnedPasswordHash = result.password
+            let isValid: boolean = bcrypt.compareSync(password, returnedPasswordHash)
+            if (isValid) {
+                await killOpenSession(usid)
+                let sessionID = await openNewSession(usid)
+                return returnValidateUser = {
+                    isValid: true,
+                    wrongInput: null,
+                    sessionID
                 }
-                return returnValidateUser
             }
             else {
-                let returnedPasswordHash = queryResult.password
-                let isValid: boolean = bcrypt.compareSync(password, returnedPasswordHash);
-                let returnValidateUser: iReturnValidateUser = {
-                    isValid,
-                    wrongInput: isValid ? null : "password"
+                return returnValidateUser = {
+                    isValid: false,
+                    wrongInput: 'password'
                 }
-                return returnValidateUser
             }
+    }
+
+}
+
+async function killOpenSession(usid: string): Promise<void> {
+    await session
+        .update({ status: 2, active: 0 },
+            {
+                where: {
+                    status: 1,
+                    user: usid
+                }
+            })
+        .then()
+        .catch((err: Error) => {
+            const errorToBeThrown = new Error
+            errorToBeThrown.message = err.message
+            errorToBeThrown.name = err.name
+            throw errorToBeThrown
+        })
+    return session
+}
+
+async function openNewSession(usid: string): Promise<string> {
+    const result = await session
+        .create({
+            status: 1,
+            user: usid,
+            active: 1
+        })
+        .then((res: any) => {
+            return res.id
         })
         .catch((err: Error) => {
             const errorToBeThrown = new Error

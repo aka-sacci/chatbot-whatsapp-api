@@ -1,10 +1,11 @@
 {
   "development": {
     "username": "root",
-    "password": "pref2022pref2022",
+    "password": "mortadela1",
     "database": "database_farmanova_dev",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "test": {
     "username": "sqlite",
@@ -12,7 +13,8 @@
     "database": "database_farmanova_test",
     "host": "127.0.0.1",
     "dialect": "sqlite",
-    "storage": "./src/database/database.sqlite" 
+    "storage": "./src/database/database.sqlite",
+    "logging": false
   },
   "production": {
     "username": "root",
