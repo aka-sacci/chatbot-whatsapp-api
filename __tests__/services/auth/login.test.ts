@@ -17,8 +17,6 @@ import { sessionMockUp } from '../../../src/mocks/sessionMock'
 //import session model
 const session = require('../../../src/database/models/').tb_sessions
 
-
-
 describe('login (S)', () => {
     let result: iReturnObject
 
