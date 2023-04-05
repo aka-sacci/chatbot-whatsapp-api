@@ -45,3 +45,8 @@ export interface iAuthRequestBody {
     usid: string, 
     password: string
 }
+
+export interface iReturnSeparateToken {
+    tokenExists: boolean,
+    separateToken?: String
+}
