@@ -24,7 +24,7 @@ describe('login (S)', () => {
         await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
     }
 
-    const checkIfFormerSessionIsExpired = async (usid: string) => {
+    const checkIfSessionIsExpired = async (sessionID: number) => {
         const result = session
             .findOne(
                 {
@@ -32,7 +32,7 @@ describe('login (S)', () => {
                 },
                 {
                     where: {
-                        id: 1
+                        id: sessionID
                     }
                 })
             .then((queryResult: any) => {
@@ -59,13 +59,11 @@ describe('login (S)', () => {
             usid: "admin",
             password: "admin",
         })
-        let isFormerSessionExpired = await checkIfFormerSessionIsExpired('admin')
+        let isFormerSessionExpired = await checkIfSessionIsExpired(1)
         expect(result.success).toBe(true)
         expect(result.hasRows).toBe(true)
         expect(result.sessionID).toBe(2)
         expect(isFormerSessionExpired).toBe(true)
-
-
     });
 
     it('should fail in password authentication', async () => {

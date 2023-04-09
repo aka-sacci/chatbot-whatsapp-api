@@ -38,7 +38,12 @@ export interface iReturnObject {
     qtd?: object
     error?: Error,
     wrongInput?: string | null,
-    sessionID?: string | null
+    sessionID?: string | null,
+    sessionNewStatus?: number
+}
+
+export interface iRequestSession {
+    sessionNewStatus: number
 }
 
 export interface iAuthRequestBody {
@@ -49,4 +54,19 @@ export interface iAuthRequestBody {
 export interface iReturnSeparateToken {
     tokenExists: boolean,
     separateToken?: String
+}
+
+export interface iSessionActivitySetter {
+    sessionID: number,
+    sessionNewStatus: number
+}
+
+export interface iDecodedJWT {
+    usid: string,
+    sessionID: number,
+}
+
+export interface iExecuteChange {
+    statusCode: number,
+    message: null | string
 }

@@ -1,4 +1,4 @@
-import { iReturnObject, iReturnValidateUser } from "../../../@types/myTypes";
+import { iReturnObject, iDecodedJWT } from "../../../@types/myTypes";
 import jwt from "jsonwebtoken";
 import 'dotenv/config'
 const session = require('../../../database/models/').tb_sessions
@@ -10,7 +10,7 @@ export default async function isAuthed(params: { token: string }): Promise<iRetu
     const { token } = params
     let sessionID = 0;
 
-    jwt.verify(token, String(process.env.JWT_SECRET), (err: any, decoded: any) => {
+    jwt.verify(token, String(process.env.JWT_SECRET), (err: any, decoded: iDecodedJWT | any) => {
         if (err) {
             const tokenError = new Error()
             tokenError.message = err.message

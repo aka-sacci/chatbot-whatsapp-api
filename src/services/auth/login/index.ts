@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const user = require('../../../database/models/').tb_user
 const session = require('../../../database/models/').tb_sessions
 
-export default async function login(params: iLoginParams) {
+export default async function login (params: iLoginParams) {
     const { usid, password } = params
     let returnObject: iReturnObject;
     try {

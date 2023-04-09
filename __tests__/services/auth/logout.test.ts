@@ -24,7 +24,7 @@ describe('logout (s)', () => {
         await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
     }
 
-    const checkIfSessionIsExpired = async (id: number) => {
+    const checkIfSessionIsExpired = async (sessionID: number) => {
         const result = session
             .findOne(
                 {
@@ -32,7 +32,7 @@ describe('logout (s)', () => {
                 },
                 {
                     where: {
-                        id
+                        id: sessionID
                     }
                 })
             .then((queryResult: any) => {

@@ -1,4 +1,4 @@
-import { iReturnObject } from "../../../@types/myTypes";
+import { iReturnObject, iDecodedJWT } from "../../../@types/myTypes";
 import jwt from "jsonwebtoken";
 const session = require('../../../database/models/').tb_sessions
 
@@ -8,7 +8,7 @@ export default async function logout(params: { token: string }): Promise<iReturn
     let sessionID = 0;
     try {
 
-        jwt.verify(token, String(process.env.JWT_SECRET), (err: any, decoded: any) => {
+        jwt.verify(token, String(process.env.JWT_SECRET), (err: any, decoded: iDecodedJWT | any) => {
             if (err) {
                 const tokenError = new Error()
                 tokenError.message = err.message
