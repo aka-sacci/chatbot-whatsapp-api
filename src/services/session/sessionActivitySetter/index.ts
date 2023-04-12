@@ -15,9 +15,12 @@ export default async function sessionActivitySetter(params: iSessionActivitySett
                 sessionNewStatus
             }
         } else {
+            let returnedError = new Error()
+            returnedError.name = "ERR_INVALID_SESSION"
+            returnedError.message = 'Cannot change the status of a expired session!'
             returnObject = {
-                success: true,
-                sessionNewStatus: 0
+                success: false,
+                error: returnedError
             }
         }
     } catch (err: any | Error) {

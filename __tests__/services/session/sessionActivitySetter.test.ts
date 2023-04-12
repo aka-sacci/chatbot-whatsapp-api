@@ -74,9 +74,9 @@ describe('sessionStatusSetter (s)', () => {
             sessionNewStatus: 1
         })
         let isSessionActive = await checkIfSessionIsActive(2)
-        expect(result.success).toBe(true)
-        expect(result.sessionNewStatus).toBe(0)
+        expect(result.success).toBe(false)
         expect(isSessionActive).toBe(false)
+        expect(result).toHaveProperty("error")
     });
 
     it('should throw a connection error', async () => {

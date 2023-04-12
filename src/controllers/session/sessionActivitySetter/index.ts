@@ -55,18 +55,23 @@ async function executeChange(sessionID: number, sessionStatusToChange: number, t
 
                     else {
                         let sessionExpiredError = new Error
-                        sessionExpiredError.name = "ExpiredSessionError"
-                        sessionExpiredError.message = "Your session was expired!"
-                        returnObject = {
-                            statusCode: 403,
-                            message: String(sessionExpiredError)
-                        }
+                        sessionExpiredError.name = "StatusNotChanged"
+                        sessionExpiredError.message = "Your session was not changed!"
+                        throw sessionExpiredError
                     }
                 }
                 else {
-                    returnObject = {
-                        statusCode: 500,
-                        message: String(serviceData.error)
+                    if (serviceData.error?.name == 'ERR_INVALID_SESSION') {
+                        returnObject = {
+                            statusCode: 403,
+                            message: String(serviceData.error)
+                        }
+                    } else {
+
+                        returnObject = {
+                            statusCode: 500,
+                            message: String(serviceData.error)
+                        }
                     }
                 }
             }).catch((err: Error) => {

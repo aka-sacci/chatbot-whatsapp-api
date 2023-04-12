@@ -116,7 +116,12 @@ describe('sessionActivitySetter (c)', () => {
         expect(myResponse.status).toBe(403)
         expect(isSessionActive).toBe(false)
     })
-
+    it('should fail in inactive the session with a valid token, but expired session, returning status 403', async () => {
+        const myResponse = await response(invalidToken, 0)
+        let isSessionActive = await checkIfSessionIsActive(2)
+        expect(myResponse.status).toBe(403)
+        expect(isSessionActive).toBe(false)
+    })
     it('should return status 500 and a error', async () => {
 
         //Cleaning database
