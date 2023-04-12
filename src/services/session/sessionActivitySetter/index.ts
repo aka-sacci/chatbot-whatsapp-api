@@ -1,5 +1,4 @@
 import { iReturnObject, iSessionActivitySetter } from "../../../@types/myTypes";
-const bcrypt = require('bcrypt');
 const session = require('../../../database/models/').tb_sessions
 
 export default async function sessionActivitySetter(params: iSessionActivitySetter): Promise<iReturnObject> {

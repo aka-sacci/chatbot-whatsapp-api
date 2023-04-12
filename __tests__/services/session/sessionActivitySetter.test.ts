@@ -4,11 +4,6 @@ import { iReturnObject } from "../../../src/@types/myTypes";
 //Import database
 const db = require('../../../src/database/models')
 
-//import seeder
-const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
-const seederInsertDefaultUser = require('../../../src/database/seeders/20230228021930-insert-default-user.js')
-const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses')
-
 //Import Service
 import sessionActivitySetter from "../../../src/services/session/sessionActivitySetter"
 
@@ -18,7 +13,7 @@ import { sessionMockUp } from '../../../src/mocks/sessionMock'
 //import session model
 const session = require('../../../src/database/models/').tb_sessions
 
-describe('sessionStatusSetter (s)', () => {
+describe('sessionActivitySetter (s)', () => {
     let result: iReturnObject
 
     const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
@@ -41,9 +36,6 @@ describe('sessionStatusSetter (s)', () => {
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
-        await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
-        await seederInsertDefaultUser.up(db.sequelize.getQueryInterface(), Sequelize)
-        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
         await bulkInsertSession(1, 1, 'Admin', 1)
         await bulkInsertSession(2, 2, 'Admin2', 0)
 

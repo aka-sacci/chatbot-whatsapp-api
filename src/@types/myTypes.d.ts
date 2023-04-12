@@ -39,7 +39,8 @@ export interface iReturnObject {
     error?: Error,
     wrongInput?: string | null,
     sessionID?: string | null,
-    sessionNewStatus?: number
+    sessionNewStatus?: number,
+    isSessionActive?: boolean
 }
 
 export interface iRequestSession {
@@ -69,4 +70,8 @@ export interface iDecodedJWT {
 export interface iExecuteChange {
     statusCode: number,
     message: null | string
+}
+
+export interface iSessionActivityGetter {
+    sessionID: number
 }
