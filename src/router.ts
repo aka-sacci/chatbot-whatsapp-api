@@ -3,6 +3,7 @@ import isAuthedController from "./controllers/auth/isAuthed";
 import loginController from "./controllers/auth/login";
 import logoutController from "./controllers/auth/logout";
 import sessionActivitySetterController from "./controllers/session/sessionActivitySetter";
+import sessionActivityGetterController from "./controllers/session/sessionActivityGetter";
 //import { iController } from "./@types/myTypes";
 
 
@@ -30,5 +31,8 @@ router.get('/auth/isauthed', isAuthedController)
 
 //SessionActivitySetter route
 router.post('/session/sessionactivitysetter', sessionActivitySetterController)
+
+//SessionActivityGetter route
+router.post('/session/sessionactivitygetter', sessionActivityGetterController)
 
 exports.router = router

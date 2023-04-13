@@ -21,6 +21,7 @@ export default async function sessionActivityGetter(params: iSessionActivityGett
             error: errorToBeThrown
         }
     }
+    
     return returnObject
 }
 

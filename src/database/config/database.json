@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "pref2022pref2022",
+    "password": "mortadela1",
     "database": "database_farmanova_dev",
     "host": "127.0.0.1",
     "dialect": "mysql",

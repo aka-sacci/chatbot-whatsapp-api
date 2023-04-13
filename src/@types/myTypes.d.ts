@@ -75,3 +75,9 @@ export interface iExecuteChange {
 export interface iSessionActivityGetter {
     sessionID: number
 }
+
+export interface iGetActivityStatus {
+    statusCode: number,
+    active?: boolean,
+    message?: null | string
+}
