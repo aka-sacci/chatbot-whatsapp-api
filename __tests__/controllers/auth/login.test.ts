@@ -22,16 +22,6 @@ describe('login (c)', () => {
         return myRequest
     }
 
-    const responseWithToken = async (usid: string, password: string, token: string) => {
-        const myRequest = await request(testServer)
-            .post("/auth/login")
-            .send({
-                usid: usid,
-                password: password
-            })
-        return myRequest
-    }
-
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)

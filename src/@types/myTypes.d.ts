@@ -40,7 +40,8 @@ export interface iReturnObject {
     wrongInput?: string | null,
     sessionID?: string | null,
     sessionNewStatus?: number,
-    isSessionActive?: boolean
+    isSessionActive?: boolean,
+    contactExists?: boolean
 }
 
 export interface iRequestSession {
@@ -80,4 +81,16 @@ export interface iGetActivityStatus {
     statusCode: number,
     active?: boolean,
     message?: null | string
+}
+
+export interface iContactAddress {
+    street: string,
+    number: number,
+    district: string,
+    cep: number,
+    complement?: string
+}
+
+export interface iCheckContactRegister {
+    phone: string
 }
