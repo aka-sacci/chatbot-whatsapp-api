@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      
     }
   }
   tb_contacts_addresses.init({
-    steet: { 
+    street: { 
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -27,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     cep: { 
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     complement: { 

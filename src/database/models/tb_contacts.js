@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      tb_contacts.hasOne(models.tb_contacts_addresses, {
+        foreignKey: 'contact'
+      })
     }
   }
   tb_contacts.init({
@@ -19,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    name: { 
+    name: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    registered: { 
+    registered: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },

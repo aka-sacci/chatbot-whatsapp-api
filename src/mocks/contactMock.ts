@@ -17,9 +17,9 @@ export const contactMockUp = async (queryInterface: QueryInterface, Sequelize: S
         })
 
     if (address) {
-        console.log("will insert address")
         let { street, number, district, cep, complement } = address
         await queryInterface.bulkInsert('tb_contacts_addresses', [{
+            contact: phone,
             street,
             number,
             district,
