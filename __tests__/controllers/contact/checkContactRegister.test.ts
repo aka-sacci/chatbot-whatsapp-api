@@ -7,7 +7,7 @@ const request = require('supertest')
 const testServer = require("../../../src/server")
 
 //Import database
-const db = require('../../../src/database/models')
+const db = require('../../../src/database/models') 
 
 describe('checkContactRegister (c)', () => {
     let myPhone = "+5511997645981"
