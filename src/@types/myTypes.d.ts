@@ -101,5 +101,6 @@ export interface iContactData {
     phone: string,
     name: string,
     registered: boolean,
-    address?: iContactAddress
+    address?: iContactAddress,
+    statusCode?: number
 }
