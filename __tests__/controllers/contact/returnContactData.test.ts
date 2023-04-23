@@ -9,19 +9,10 @@ const db = require('../../../src/database/models')
 const request = require('supertest')
 const testServer = require("../../../src/server")
 
+//Import Mocks
+import { sacciData, wrongPhone, jhonatanData } from "../../../src/mocks/data/contactData";
 
 describe('returnContactData (c)', () => {
-
-    let sacciPhone = "+5511997645981"
-    let sacciAddrress: iContactAddress = {
-        street: 'Rua João de Passos',
-        number: 484,
-        district: 'Centro',
-        cep: 12960000
-    }
-
-    let jhonatanPhone = "+5511955546146"
-    let wrongPhone = "+5511995548455"
 
     const response = async (phone: string) => {
         const myRequest = await request(testServer)
@@ -40,23 +31,23 @@ describe('returnContactData (c)', () => {
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
-        bulkInsertContact(sacciPhone, 'Lucas Sacci', sacciAddrress)
-        bulkInsertContact(jhonatanPhone, 'Jhonatan Tabajara')
+        bulkInsertContact(sacciData.phone, sacciData.name, sacciData.address)
+        bulkInsertContact(jhonatanData.phone, jhonatanData.name)
     })
 
     it('should return status 200 and all the contact data with a registered number and address', async () => {
-        let myResponse = await response(sacciPhone)
+        let myResponse = await response(sacciData.phone)
         expect(myResponse.status).toBe(200)
-        expect(myResponse.body.name).toBe('Lucas Sacci')
-        expect(myResponse.body.address.street).toBe(sacciAddrress.street)
-        expect(myResponse.body.address.cep).toBe(sacciAddrress.cep)
-        expect(myResponse.body.address.district).toBe(sacciAddrress.district)
-        expect(myResponse.body.address.number).toBe(sacciAddrress.number)
+        expect(myResponse.body.name).toBe(sacciData.name)
+        expect(myResponse.body.address.street).toBe(sacciData.address?.street)
+        expect(myResponse.body.address.cep).toBe(sacciData.address?.cep)
+        expect(myResponse.body.address.district).toBe(sacciData.address?.district)
+        expect(myResponse.body.address.number).toBe(sacciData.address?.number)
     });
     it('should return status 206 and the partial contact data, with a registered number but unregistered address', async () => {
-        let myResponse = await response(jhonatanPhone)
+        let myResponse = await response(jhonatanData.phone)
         expect(myResponse.status).toBe(206)
-        expect(myResponse.body.name).toBe('Jhonatan Tabajara')
+        expect(myResponse.body.name).toBe(jhonatanData.name)
         expect(myResponse.body).not.toHaveProperty('address')
     });
     it('should return status 404 with a register that doesn´t exists', async () => {
@@ -74,7 +65,7 @@ describe('returnContactData (c)', () => {
         ////Shutting down connection...
         db.sequelize.close();
 
-        let myResponse = await response(sacciPhone)
+        let myResponse = await response(sacciData.phone)
         expect(myResponse.status).toBe(500)
         expect(myResponse.body).toHaveProperty("error")
     });

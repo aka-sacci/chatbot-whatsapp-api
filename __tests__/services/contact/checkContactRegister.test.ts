@@ -8,10 +8,11 @@ import checkContactRegister from "../../../src/services/contact/checkContactRegi
 
 //Import Mock
 import { contactMockUp } from "../../../src/mocks/contactMock";
+import { sacciData, wrongPhone } from "../../../src/mocks/data/contactData";
 
 describe('checkContactRegister (s)', () => {
     let result: iReturnObject
-    let myPhone = "+5511997645981"
+    
 
     const bulkInsertContact = async (phone: string, name: string) => {
         await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
@@ -19,11 +20,11 @@ describe('checkContactRegister (s)', () => {
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
-        bulkInsertContact(myPhone, 'Lucas Sacci')
+        bulkInsertContact(sacciData.phone, sacciData.name)
     })
     it('should successfully return that the register exists', async () => {
         result = await checkContactRegister({
-            phone: myPhone
+            phone: sacciData.phone
         })
         expect(result.success).toBe(true)
         expect(result.contactExists).toBe(true)
@@ -31,7 +32,7 @@ describe('checkContactRegister (s)', () => {
 
     it('should successfully return that the register doesn´t exists', async () => {
         result = await checkContactRegister({
-            phone: '+551195378468'
+            phone: wrongPhone
         })
         expect(result.success).toBe(true)
         expect(result.contactExists).toBe(false)
@@ -47,7 +48,7 @@ describe('checkContactRegister (s)', () => {
         db.sequelize.close();
 
         result = await checkContactRegister({
-            phone: myPhone,
+            phone: sacciData.phone,
         })
 
         expect(result.success).toBe(false)

@@ -6,6 +6,7 @@ import sessionActivitySetterController from "./controllers/session/sessionActivi
 import sessionActivityGetterController from "./controllers/session/sessionActivityGetter";
 import checkContactRegisterController from "./controllers/contact/checkContactRegister";
 import returnContactDataController from "./controllers/contact/returnContactData";
+import registerContactController from "./controllers/contact/registerContact";
 //import { iController } from "./@types/myTypes";
 
 
@@ -40,5 +41,7 @@ router.post('/session/sessionactivitygetter', sessionActivityGetterController)
 router.get('/contact/checkcontactregister/:phone', checkContactRegisterController)
 
 router.get('/contact/returncontactdata/:phone', returnContactDataController)
+
+router.post('/contact/registercontact', registerContactController)
 
 exports.router = router

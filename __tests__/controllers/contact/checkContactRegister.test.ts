@@ -9,9 +9,11 @@ const testServer = require("../../../src/server")
 //Import database
 const db = require('../../../src/database/models') 
 
+//import mocks
+import { sacciData, wrongPhone } from "../../../src/mocks/data/contactData";
+
 describe('checkContactRegister (c)', () => {
-    let myPhone = "+5511997645981"
-    let wrongPhone = "+551159597874"
+
 
     const response = async (phone: string) => {
         const myRequest = await request(testServer)
@@ -27,10 +29,10 @@ describe('checkContactRegister (c)', () => {
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
-        await bulkInsertContact(myPhone, 'Lucas Sacci')
+        await bulkInsertContact(sacciData.phone, sacciData.name)
     })
     it('should return status 200 with a registered number', async () => {
-        let myResponse = await response(myPhone)
+        let myResponse = await response(sacciData.phone)
         expect(myResponse.status).toBe(200)
     });
 
@@ -49,7 +51,7 @@ describe('checkContactRegister (c)', () => {
         ////Shutting down connection...
         db.sequelize.close();
 
-        let myResponse = await response(myPhone)
+        let myResponse = await response(sacciData.phone)
         expect(myResponse.status).toBe(500)
         expect(myResponse.body).toHaveProperty("error")
     });

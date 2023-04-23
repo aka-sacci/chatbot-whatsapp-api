@@ -14,8 +14,6 @@ const db = require('../../../src/database/models')
 //import mocks
 import { sessionMockUp } from '../../../src/mocks/sessionMock'
 
-//import session model
-const session = require('../../../src/database/models/').tb_sessions
 
 describe('sessionActivityGetter (s)', () => {
     let activeToken: string

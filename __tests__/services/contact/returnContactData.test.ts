@@ -8,19 +8,10 @@ import returnContactData from "../../../src/services/contact/returnContactData";
 
 //Import Mock
 import { contactMockUp } from "../../../src/mocks/contactMock";
+import { jhonatanData, sacciData, wrongPhone } from "../../../src/mocks/data/contactData";
 
 describe('returnContactData (S)', () => {
     let result: iReturnObject
-    let sacciPhone = "+5511997645981"
-    let sacciAddrress: iContactAddress = {
-        street: 'Rua João de Passos',
-        number: 484,
-        district: 'Centro',
-        cep: 12960000
-    }
-
-    let jhonatanPhone = "+5511955546146"
-    let wrongPhone = "+5511995548455"
 
     const bulkInsertContact = async (phone: string, name: string, address?: iContactAddress) => {
         if (address) {
@@ -32,26 +23,26 @@ describe('returnContactData (S)', () => {
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
-        bulkInsertContact(sacciPhone, 'Lucas Sacci', sacciAddrress)
-        bulkInsertContact(jhonatanPhone, 'Jhonatan Tabajara')
+        bulkInsertContact(sacciData.phone, sacciData.name, sacciData.address)
+        bulkInsertContact(jhonatanData.phone, jhonatanData.name)
     })
 
     it('should successfully return all the contact data, including the address', async () => {
-        result = await returnContactData({ phone: sacciPhone })
+        result = await returnContactData({ phone: sacciData.phone })
         expect(result.success).toBe(true)
-        expect(result.contactData?.phone).toBe(sacciPhone)
-        expect(result.contactData?.name).toBe('Lucas Sacci')
-        expect(result.contactData?.address?.street).toBe(sacciAddrress.street)
-        expect(result.contactData?.address?.cep).toBe(sacciAddrress.cep)
-        expect(result.contactData?.address?.district).toBe(sacciAddrress.district)
-        expect(result.contactData?.address?.number).toBe(sacciAddrress.number)
+        expect(result.contactData?.phone).toBe(sacciData.phone)
+        expect(result.contactData?.name).toBe(sacciData.name)
+        expect(result.contactData?.address?.street).toBe(sacciData.address?.street)
+        expect(result.contactData?.address?.cep).toBe(sacciData.address?.cep)
+        expect(result.contactData?.address?.district).toBe(sacciData.address?.district)
+        expect(result.contactData?.address?.number).toBe(sacciData.address?.number)
     });
 
     it('should successfully return all the contact data, excluding the address', async () => {
-        result = await returnContactData({ phone: jhonatanPhone })
+        result = await returnContactData({ phone: jhonatanData.phone })
         expect(result.success).toBe(true)
-        expect(result.contactData?.phone).toBe(jhonatanPhone)
-        expect(result.contactData?.name).toBe('Jhonatan Tabajara')
+        expect(result.contactData?.phone).toBe(jhonatanData.phone)
+        expect(result.contactData?.name).toBe(jhonatanData.name)
         expect(result.contactData).not.toHaveProperty('address')
     });
 
@@ -66,12 +57,15 @@ describe('returnContactData (S)', () => {
         await db.tb_contacts.destroy({
             truncate: true
         })
+        await db.tb_contacts_addresses.destroy({
+            truncate: true
+        })
 
         ////Shutting down connection...
         db.sequelize.close();
 
         result = await returnContactData({
-            phone: sacciPhone,
+            phone: sacciData.phone,
         })
 
         expect(result.success).toBe(false)
