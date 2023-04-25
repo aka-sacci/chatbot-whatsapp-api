@@ -26,6 +26,19 @@ export const estefaniData: iContactData = {
     }
 }
 
+export const newEstefaniData: iContactData = {
+    phone: "+5511972277826",
+    name: "Estéfani de Garcez Camargo",
+    registered: true,
+    address: {
+        street: 'Rua Bragança Paulista',
+        number: 220,
+        district: 'Jardim Paulista II',
+        cep: 12947452,
+        complement: "Kombi Vermelha na Frente"
+    }
+}
+
 export const jhonatanData: iContactData = {
     phone: '+5511955546146',
     name: 'Jhonatan Tabajara',
