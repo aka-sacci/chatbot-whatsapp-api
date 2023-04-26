@@ -7,6 +7,7 @@ import sessionActivityGetterController from "./controllers/session/sessionActivi
 import checkContactRegisterController from "./controllers/contact/checkContactRegister";
 import returnContactDataController from "./controllers/contact/returnContactData";
 import registerContactController from "./controllers/contact/registerContact";
+import updateContactController from "./controllers/contact/updateContact";
 //import { iController } from "./@types/myTypes";
 
 
@@ -23,19 +24,14 @@ router.get('/test', (req: Request, res: Response) => {
 //GET QUOTES ROUTE
 //router.get('/getquotes/:quote', GetQuotesController.handle)
 
-//Login Route
 router.post('/auth/login', loginController)
 
-//Logout Route
 router.get('/auth/logout', logoutController)
 
-//IsAuthed Route
 router.get('/auth/isauthed', isAuthedController)
 
-//SessionActivitySetter route
 router.post('/session/sessionactivitysetter', sessionActivitySetterController)
 
-//SessionActivityGetter route
 router.post('/session/sessionactivitygetter', sessionActivityGetterController)
 
 router.get('/contact/checkcontactregister/:phone', checkContactRegisterController)
@@ -43,5 +39,7 @@ router.get('/contact/checkcontactregister/:phone', checkContactRegisterControlle
 router.get('/contact/returncontactdata/:phone', returnContactDataController)
 
 router.post('/contact/registercontact', registerContactController)
+
+router.post('/contact/updatecontact', updateContactController)
 
 exports.router = router
