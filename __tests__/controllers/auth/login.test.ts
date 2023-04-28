@@ -1,3 +1,5 @@
+import { sessionMockUp } from "../../../src/mocks/sessionMock";
+
 const { Sequelize } = require('sequelize');
 
 //IMPORT SUPERTEST
@@ -10,6 +12,7 @@ const db = require('../../../src/database/models')
 //import seeder
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
 const seederInsertDefaultUser = require('../../../src/database/seeders/20230228021930-insert-default-user.js')
+const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses')
 
 describe('login (c)', () => {
     const response = async (usid: string, password: string) => {
@@ -26,6 +29,7 @@ describe('login (c)', () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertDefaultUser.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     })
 
     it('should return status 200 and a JWT token', async () => {
@@ -47,18 +51,16 @@ describe('login (c)', () => {
         expect(myResponse.body.wrongInput).toBe("password")
     })
     it('should return status 500 and a error', async () => {
-        //Reverting seeders...
-        await seederInsertDefaultUser.down(db.sequelize.getQueryInterface(), Sequelize)
-        await seederInsertRoles.down(db.sequelize.getQueryInterface(), Sequelize)
-
         //Cleaning database
-        await db.tb_user.destroy({
+        await db.tb_sessions.destroy({
             truncate: true
         })
+        await seederInsertDefaultUser.down(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertRoles.down(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
         await db.tb_Role.destroy({
             truncate: true
-        });
-
+        })
         ////Shutting down connection...
         db.sequelize.close();
 

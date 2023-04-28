@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_Role.hasMany(models.tb_user, { foreignKey: 'role', sourceKey: 'id' });
     }
   }
   tb_Role.init({

@@ -41,8 +41,9 @@ export interface iReturnObject {
     sessionID?: string | null,
     sessionNewStatus?: number,
     isSessionActive?: boolean,
-    contactExists?: boolean
-    contactData?: iContactData
+    contactExists?: boolean,
+    contactData?: iContactData,
+    contactID?: number
 }
 
 export interface iRequestSession {

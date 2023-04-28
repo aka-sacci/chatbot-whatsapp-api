@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      tb_User.belongsTo(models.tb_Role, { foreignKey: 'role', targetKey: 'id' });
 
+      tb_User.hasMany(models.tb_sessions, {
+        foreignKey: 'user',
+      });
     }
   }
   tb_User.init({

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_sessions.belongsTo(models.tb_user, { foreignKey: 'user' });
     }
   }
   tb_sessions.init({

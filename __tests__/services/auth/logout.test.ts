@@ -14,6 +14,12 @@ import { sessionMockUp } from '../../../src/mocks/sessionMock'
 
 //import session model
 const session = require('../../../src/database/models/').tb_sessions
+
+//import seeder
+const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
+const seederInsertDefaultUser = require('../../../src/database/seeders/20230228021930-insert-default-user.js')
+const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses')
+
 describe('logout (s)', () => {
     let result: iReturnObject
     let token: string
@@ -48,6 +54,9 @@ describe('logout (s)', () => {
 
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
+        await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertDefaultUser.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     }
 
     const signTokens = () => {
@@ -100,7 +109,13 @@ describe('logout (s)', () => {
         //Cleaning database
         await db.tb_sessions.destroy({
             truncate: true
-        });
+        })
+        await seederInsertDefaultUser.down(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertRoles.down(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
+        await db.tb_Role.destroy({
+            truncate: true
+        })
 
         ////Shutting down connection...
         db.sequelize.close();

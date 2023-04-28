@@ -89,22 +89,20 @@ describe('login (S)', () => {
     });
 
     it('should throw a connection error', async () => {
-        //Reverting seeders...
+
+        //Cleaning database
+        await db.tb_sessions.destroy({
+            truncate: true
+        })
         await seederInsertDefaultUser.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertRoles.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertSessionStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
-
-        //Cleaning database
-        await db.tb_user.destroy({
-            truncate: true
-        })
         await db.tb_Role.destroy({
             truncate: true
-        });
+        })
 
         ////Shutting down connection...
         db.sequelize.close();
-
         result = await login({
             usid: "teste",
             password: "teste",
