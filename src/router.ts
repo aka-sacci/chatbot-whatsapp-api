@@ -8,6 +8,7 @@ import checkContactRegisterController from "./controllers/contact/checkContactRe
 import returnContactDataController from "./controllers/contact/returnContactData";
 import registerContactController from "./controllers/contact/registerContact";
 import updateContactController from "./controllers/contact/updateContact";
+import checkUserDisponibilityController from "./controllers/chat/checkUserDisponibility";
 //import { iController } from "./@types/myTypes";
 
 
@@ -41,5 +42,7 @@ router.get('/contact/returncontactdata/:phone', returnContactDataController)
 router.post('/contact/registercontact', registerContactController)
 
 router.post('/contact/updatecontact', updateContactController)
+
+router.get('/chat/checkuserdisponibility', checkUserDisponibilityController)
 
 exports.router = router

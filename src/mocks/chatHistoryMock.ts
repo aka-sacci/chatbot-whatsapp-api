@@ -3,7 +3,7 @@ import { QueryInterface } from "sequelize";
 
 
 export const chatHistoryMockUp = async (queryInterface: QueryInterface, Sequelize: Sequelize, id: number, chat: number, session: number, action: number) => {
-  await queryInterface.bulkInsert('tb_chats_history', [{
+  await queryInterface.bulkInsert('tb_chats_histories', [{
     id,
     chat,
     session,
@@ -20,5 +20,5 @@ export const chatHistoryMockUp = async (queryInterface: QueryInterface, Sequeliz
 
 
 export const chatHistoryMockDown = async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
-  await queryInterface.bulkDelete('tb_chats_history', {});
+  await queryInterface.bulkDelete('tb_chats_histories', {});
 }

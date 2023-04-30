@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { isMapIterator } from 'util/types'
 
 export interface iControllerParams {
     req: Request,
@@ -18,7 +19,7 @@ export interface iReturnValidateUser {
 }
 
 export interface iUser {
-    
+
     usid: string,
     password: string,
     name: string,
@@ -43,7 +44,8 @@ export interface iReturnObject {
     isSessionActive?: boolean,
     contactExists?: boolean,
     contactData?: iContactData,
-    contactID?: number
+    contactID?: number,
+    userID?: string
 }
 
 export interface iRequestSession {
@@ -51,7 +53,7 @@ export interface iRequestSession {
 }
 
 export interface iAuthRequestBody {
-    usid: string, 
+    usid: string,
     password: string
 }
 
@@ -105,3 +107,18 @@ export interface iContactData {
     address?: iContactAddress,
     statusCode?: number
 }
+
+export interface iSession {
+    id: string,
+    status: number,
+    user: string,
+    active: boolean,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface iOpenedChatsByUser {
+    user: string,
+    openedChats: number,
+    activeSession: string
+} 

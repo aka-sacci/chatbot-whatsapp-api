@@ -1,10 +1,14 @@
 const { Sequelize } = require('sequelize');
-import { iReturnObject, iUser } from "../../../src/@types/myTypes";
+import { iUser } from "../../../src/@types/myTypes";
 import { chatHistoryMockUp } from "../../../src/mocks/chatHistoryMock";
 import { chatMockUp } from "../../../src/mocks/chatMock";
 import { contactMockUp } from "../../../src/mocks/contactMock";
 import { estefaniData, jhonatanData, sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, activeUserTwo, inactiveUserOne, inactiveUserTwo } from "../../../src/mocks/data/userData";
+
+//IMPORT SUPERTEST
+const request = require('supertest')
+const testServer = require("../../../src/server")
 
 //Import database
 const db = require('../../../src/database/models')
@@ -18,10 +22,15 @@ const seederInsertChatStatuses = require('../../../src/database/seeders/20230328
 //import mocks
 import { sessionMockUp } from '../../../src/mocks/sessionMock'
 import { userMockUp } from "../../../src/mocks/userMock";
-import checkUserDisponibility from "../../../src/services/chat/checkUserDisponibility";
 
-describe('checkUserDisponibility (s)', () => {
-    let result: iReturnObject
+describe('checkUserDisponibility (c)', () => {
+
+    const response = async () => {
+        const myRequest = await request(testServer)
+            .get("/chat/checkuserdisponibility")
+            .send()
+        return myRequest
+    }
 
     const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
         await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
@@ -71,31 +80,31 @@ describe('checkUserDisponibility (s)', () => {
     it('should successfully return an random active user, with many active sessions in the database', async () => {
         await bulkInsertSession(1, 1, activeUserOne.usid, 1)
         await bulkInsertSession(2, 1, activeUserTwo.usid, 1)
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(true)
-        expect(result).toHaveProperty('sessionID')
+        let myResponse = await response()
+        expect(myResponse.status).toBe(200)
+        expect(myResponse.body).toHaveProperty('sessionID')
     });
     it('should successfully return session = 1 with just one active session in the database', async () => {
         await bulkInsertSession(1, 1, activeUserOne.usid, 1)
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(true)
-        expect(result.sessionID).toBe(1)
+        let myResponse = await response()
+        expect(myResponse.status).toBe(200)
+        expect(myResponse.body.sessionID).toBe(1)
     });
     it('should successfully return session = 2 with two sessions in the database, but the number one isn´t active', async () => {
         await bulkInsertSession(1, 1, inactiveUserOne.usid, 0)
         await bulkInsertSession(2, 1, activeUserOne.usid, 1)
         await bulkInsertSession(3, 2, inactiveUserTwo.usid, 0)
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(true)
-        expect(result.sessionID).toBe(2)
+        let myResponse = await response()
+        expect(myResponse.status).toBe(200)
+        expect(myResponse.body.sessionID).toBe(2)
     });
 
     it('should successfully return that all users aren´t active', async () => {
         await bulkInsertSession(1, 1, inactiveUserOne.usid, 0)
         await bulkInsertSession(2, 2, inactiveUserTwo.usid, 0)
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(false)
-        expect(result.error?.name).toBe('ERR_NO_USERS_AVALIABLE')
+        let myResponse = await response()
+        expect(myResponse.status).toBe(404)
+        expect(myResponse.body.error?.name).toBe('ERR_NO_USERS_AVALIABLE')
 
     });
     it('should successfully return session = 2 with two users in the database, but the number one has chats openeds, and the two hasn´t chats openeds', async () => {
@@ -110,9 +119,9 @@ describe('checkUserDisponibility (s)', () => {
         await bulkInsertChatHistory(1, 1, 1, 1)
         await bulkInsertChatHistory(2, 2, 2, 2)
         await bulkInsertChatHistory(3, 3, 1, 1)
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(true)
-        expect(result.sessionID).toBe(2)
+        let myResponse = await response()
+        expect(myResponse.status).toBe(200)
+        expect(myResponse.body.sessionID).toBe(2)
     });
     it('should successfully return session = 2 with two users in the database, but the number one has more sessions openeds', async () => {
         await bulkInsertSession(1, 1, activeUserOne.usid, 1)
@@ -126,9 +135,9 @@ describe('checkUserDisponibility (s)', () => {
         await bulkInsertChatHistory(1, 1, 1, 1)
         await bulkInsertChatHistory(2, 2, 2, 1)
         await bulkInsertChatHistory(3, 3, 1, 1)
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(true)
-        expect(result.sessionID).toBe(2)
+        let myResponse = await response()
+        expect(myResponse.status).toBe(200)
+        expect(myResponse.body.sessionID).toBe(2)
     });
     it('should throw a connection error', async () => {
         //Cleaning database
@@ -153,8 +162,8 @@ describe('checkUserDisponibility (s)', () => {
         ////Shutting down connection...
         db.sequelize.close();
 
-        result = await checkUserDisponibility()
-        expect(result.success).toBe(false)
-        expect(result).toHaveProperty("error")
+        let myResponse = await response()
+        expect(myResponse.status).toBe(500)
+        expect(myResponse.body).toHaveProperty('error')
     });
 });
