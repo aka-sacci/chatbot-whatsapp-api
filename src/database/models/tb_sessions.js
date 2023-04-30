@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       tb_sessions.belongsTo(models.tb_user, { foreignKey: 'user' });
+      tb_sessions.hasMany(models.tb_chats_history, { foreignKey: 'session' });
+      tb_sessions.belongsTo(models.tb_sessions_statuses, { foreignKey: 'status' })
     }
   }
   tb_sessions.init({

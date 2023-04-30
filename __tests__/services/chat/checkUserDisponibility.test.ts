@@ -84,7 +84,7 @@ describe('checkUserDisponibility', () => {
     it('should successfully return that all users aren´t active', () => {
         expect(1 + 1).toBe(2)
     });
-    it('should successfully return session = 2 with two users in the database, but the number one has sessions opened, and the two hasn´t sessions openeds', () => {
+    it('should successfully return session = 2 with two users in the database, but the number one has chats openeds, and the two hasn´t chats openeds', () => {
         expect(1 + 1).toBe(2)
     });
     it('should successfully return session = 2 with two users in the database, but the number one has more sessions openeds', () => {

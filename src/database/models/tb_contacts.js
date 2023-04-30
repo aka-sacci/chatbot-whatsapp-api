@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       tb_contacts.hasOne(models.tb_contacts_addresses, {
         foreignKey: 'contact'
       })
+      tb_contacts.hasMany(models.tb_chats, {
+        foreignKey: 'contact'
+      })
     }
   }
   tb_contacts.init({

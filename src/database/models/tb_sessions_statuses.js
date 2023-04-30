@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_sessions_statuses.hasMany(models.tb_sessions, { foreignKey: 'status' });
     }
   }
   tb_sessions_statuses.init({
-    description: { 
+    description: {
       type: DataTypes.STRING,
       allowNull: false
     }

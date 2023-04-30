@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_chats.hasMany(models.tb_chats_history, { foreignKey: 'chat' });
+      tb_chats.belongsTo(models.tb_chats_statuses, { foreignKey: 'status' });
+      tb_chats.belongsTo(models.tb_contacts, { foreignKey: 'contact' })
     }
   }
   tb_chats.init({

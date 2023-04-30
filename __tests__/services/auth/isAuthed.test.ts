@@ -14,6 +14,8 @@ import { sessionMockUp } from '../../../src/mocks/sessionMock'
 import { userMockUp } from "../../../src/mocks/userMock";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
+const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
+
 
 describe('isAuthed (S)', () => {
     let result: iReturnObject
@@ -31,6 +33,7 @@ describe('isAuthed (S)', () => {
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     }
 
     const signTokens = () => {

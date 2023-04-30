@@ -10,6 +10,8 @@ const testServer = require("../../../src/server")
 //Import database
 const db = require('../../../src/database/models')
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
+const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
+
 
 //import mocks
 import { sessionMockUp } from '../../../src/mocks/sessionMock'
@@ -49,6 +51,7 @@ describe('sessionActivityGetter (s)', () => {
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     }
 
     const signTokens = () => {

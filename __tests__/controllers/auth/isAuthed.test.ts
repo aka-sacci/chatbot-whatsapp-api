@@ -12,6 +12,8 @@ import { userMockUp } from "../../../src/mocks/userMock";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 import { iUser } from "../../../src/@types/myTypes";
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
+const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
+
 
 const request = require('supertest')
 const testServer = require("../../../src/server")
@@ -47,6 +49,7 @@ describe('isAuthed (c)', () => {
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     }
 
     const signTokens = () => {

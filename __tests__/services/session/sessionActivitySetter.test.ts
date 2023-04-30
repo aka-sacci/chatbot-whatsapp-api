@@ -12,6 +12,7 @@ import { sessionMockUp } from '../../../src/mocks/sessionMock'
 import { userMockUp } from "../../../src/mocks/userMock";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
+const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
 
 //import session model
 const session = require('../../../src/database/models/').tb_sessions
@@ -45,11 +46,12 @@ describe('sessionActivitySetter (s)', () => {
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
-        await bulkInsertUser({...activeUserOne})
-        await bulkInsertUser({...inactiveUserOne})
+        await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
+        await bulkInsertUser({ ...activeUserOne })
+        await bulkInsertUser({ ...inactiveUserOne })
         await bulkInsertSession(1, 1, activeUserOne.usid, 1)
         await bulkInsertSession(2, 2, inactiveUserOne.usid, 0)
-       
+
     })
     it('should change successfully the session status to inative', async () => {
         result = await sessionActivitySetter({

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_chats_statuses.hasMany(models.tb_chats, { foreignKey: 'status' });
     }
   }
   tb_chats_statuses.init({
