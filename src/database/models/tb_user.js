@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       tb_User.belongsTo(models.tb_Role, { foreignKey: 'role', targetKey: 'id' });
+      tb_User.belongsTo(models.tb_stores, { foreignKey: 'store', targetKey: 'id' });
 
       tb_User.hasMany(models.tb_sessions, {
         foreignKey: 'user',
@@ -32,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     role: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    store: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

@@ -8,6 +8,7 @@ module.exports = {
       password: '$2a$12$BD8jHVO9vo5eB1Zdzcy2geNplELbRoHd.4Ye7fvD.2UZZZYQ.pS8G',
       name: 'Administrador Default',
       role: 1,
+      store: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});

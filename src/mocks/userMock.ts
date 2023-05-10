@@ -2,12 +2,13 @@ import { Sequelize } from "sequelize";
 import { QueryInterface } from "sequelize";
 
 
-export const userMockUp = async (queryInterface: QueryInterface, Sequelize: Sequelize, usid: string, password: string, name: string, role: Number) => {
+export const userMockUp = async (queryInterface: QueryInterface, Sequelize: Sequelize, usid: string, password: string, name: string, role: Number, store: Number) => {
   await queryInterface.bulkInsert('tb_user', [{
     usid,
     password,
     name,
     role,
+    store,
     createdAt: new Date(),
     updatedAt: new Date()
   }], {})

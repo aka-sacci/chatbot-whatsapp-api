@@ -18,6 +18,7 @@ const seederInsertRoles = require('../../../src/database/seeders/20230228021532-
 const seederInsertChatsHistoryAction = require('../../../src/database/seeders/20230329162645-insert-chats-history-actions.js')
 const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
 const seederInsertChatStatuses = require('../../../src/database/seeders/20230328021018-insert-chats-statuses.js')
+const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
 //import mocks
 import { sessionMockUp } from '../../../src/mocks/sessionMock'
@@ -46,8 +47,8 @@ describe('checkUserDisponibility (c)', () => {
         await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
     }
     const bulkInsertUser = async (props: iUser) => {
-        let { usid, password, name, role } = props
-        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role)
+        let { usid, password, name, role, store } = props
+        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role, store)
     }
 
     beforeAll(async () => {
@@ -56,6 +57,7 @@ describe('checkUserDisponibility (c)', () => {
         await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertChatsHistoryAction.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertChatStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertStores.up(db.sequelize.getQueryInterface(), Sequelize)
         await bulkInsertContact(sacciData.phone, sacciData.name)
         await bulkInsertContact(estefaniData.phone, estefaniData.name)
         await bulkInsertContact(jhonatanData.phone, jhonatanData.name)
@@ -158,6 +160,8 @@ describe('checkUserDisponibility (c)', () => {
         await seederInsertSessionStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertChatsHistoryAction.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertChatStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertStores.down(db.sequelize.getQueryInterface(), Sequelize)
+
 
         ////Shutting down connection...
         db.sequelize.close();

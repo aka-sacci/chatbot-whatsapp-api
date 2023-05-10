@@ -13,6 +13,7 @@ const db = require('../../../src/database/models')
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
 const seederInsertDefaultUser = require('../../../src/database/seeders/20230228021930-insert-default-user.js')
 const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses')
+const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
 describe('login (c)', () => {
     const response = async (usid: string, password: string) => {
@@ -28,6 +29,7 @@ describe('login (c)', () => {
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertStores.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertDefaultUser.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     })
@@ -61,6 +63,8 @@ describe('login (c)', () => {
         await db.tb_Role.destroy({
             truncate: true
         })
+        await seederInsertStores.down(db.sequelize.getQueryInterface(), Sequelize)
+
         ////Shutting down connection...
         db.sequelize.close();
 

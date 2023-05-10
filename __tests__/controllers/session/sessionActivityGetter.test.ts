@@ -11,7 +11,7 @@ const testServer = require("../../../src/server")
 const db = require('../../../src/database/models')
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
 const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
-
+const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
 //import mocks
 import { sessionMockUp } from '../../../src/mocks/sessionMock'
@@ -45,13 +45,14 @@ describe('sessionActivityGetter (s)', () => {
         await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
     }
     const bulkInsertUser = async (props: iUser) => {
-        let { usid, password, name, role } = props
-        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role)
+        let { usid, password, name, role, store } = props
+        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role, store)
     }
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertStores.up(db.sequelize.getQueryInterface(), Sequelize)
     }
 
     const signTokens = () => {
@@ -109,7 +110,8 @@ describe('sessionActivityGetter (s)', () => {
             truncate: true
         });
         await seederInsertRoles.down(db.sequelize.getQueryInterface(), Sequelize)
-
+        await seederInsertSessionStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertStores.down(db.sequelize.getQueryInterface(), Sequelize)
 
         ////Shutting down connection...
         db.sequelize.close();

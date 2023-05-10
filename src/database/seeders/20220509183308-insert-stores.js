@@ -3,29 +3,23 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('tb_Role', [{
+    await queryInterface.bulkInsert('tb_stores', [{
       id: 1,
-      description: 'Administrador',
+      description: 'Todas as lojas',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
       id: 2,
-      description: 'Atendente',
+      description: 'Loja 1',
       createdAt: new Date(),
       updatedAt: new Date()
-    },
-    {
-      id: 3,
-      description: 'Farmacêutico',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },], {});
+    }], {});
 
   },
 
   async down(queryInterface, Sequelize) {
 
-    await queryInterface.bulkDelete('tb_Role', null, {});
+    await queryInterface.bulkDelete('tb_stores', null, {});
 
   }
 };

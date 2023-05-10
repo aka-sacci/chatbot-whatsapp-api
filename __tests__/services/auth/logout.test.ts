@@ -19,6 +19,7 @@ const session = require('../../../src/database/models/').tb_sessions
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
 const seederInsertDefaultUser = require('../../../src/database/seeders/20230228021930-insert-default-user.js')
 const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses')
+const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
 describe('logout (s)', () => {
     let result: iReturnObject
@@ -55,6 +56,7 @@ describe('logout (s)', () => {
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)
+        await seederInsertStores.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertDefaultUser.up(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertSessionStatuses.up(db.sequelize.getQueryInterface(), Sequelize)
     }
@@ -116,6 +118,7 @@ describe('logout (s)', () => {
         await db.tb_Role.destroy({
             truncate: true
         })
+        await seederInsertStores.down(db.sequelize.getQueryInterface(), Sequelize)
 
         ////Shutting down connection...
         db.sequelize.close();

@@ -24,6 +24,7 @@ export interface iUser {
     password: string,
     name: string,
     role: Number,
+    store: Number
 }
 
 export interface iMockData {
@@ -121,4 +122,11 @@ export interface iOpenedChatsByUser {
     user: string,
     openedChats: number,
     activeSession: string
-} 
+}
+
+export interface iMessage {
+    id?: number
+    type: 'chat' | 'image' | 'audio' | 'video' | 'sticker' | 'ptt' | 'reply' | 'document';
+    content: string,
+    chat: number
+}
