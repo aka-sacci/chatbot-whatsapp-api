@@ -46,7 +46,8 @@ export interface iReturnObject {
     contactExists?: boolean,
     contactData?: iContactData,
     contactID?: number,
-    userID?: string
+    userID?: string,
+    chatID?: number
 }
 
 export interface iRequestSession {

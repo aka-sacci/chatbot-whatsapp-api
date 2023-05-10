@@ -1,15 +1,10 @@
-import { iOpenedChatsByUser, iReturnObject, iSession, iUser } from "../../../@types/myTypes";
+import { iOpenedChatsByUser, iReturnObject, iSession } from "../../../@types/myTypes";
 const sessions = require('../../../database/models/').tb_sessions
 const chats = require('../../../database/models/').tb_chats
 const chatsHistory = require('../../../database/models/').tb_chats_history
 
 
 export default async function checkUserDisponibility(): Promise<iReturnObject> {
-
-    //Checar quais usuários estão ativos
-    //se -> Não tiver nenhum -> já retorna que não tem ninguém online
-    //se -> tiver um ou mais, a brincadeira começa
-    //se -> tiver só um online, vai ele mermo
     try {
         let sessions: Array<iSession> = await getActiveSessions();
         if (Object.keys(sessions).length === 1) return { success: true, sessionID: sessions[0].id }
