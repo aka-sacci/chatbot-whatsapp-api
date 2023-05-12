@@ -10,11 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_talks.belongsTo(models.tb_chats, { foreignKey: 'chat' })
+      tb_talks.belongsTo(models.tb_messages_senders, { foreignKey: 'sender' })
+      tb_talks.belongsTo(models.tb_messages, { foreignKey: 'message' })
     }
   }
   tb_talks.init({
     chat: DataTypes.INTEGER,
+    sender: DataTypes.INTEGER,
     message: DataTypes.INTEGER,
     seen: DataTypes.BOOLEAN
   }, {

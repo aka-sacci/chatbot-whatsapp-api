@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tb_messages_types.hasMany(models.tb_messages, { foreignKey: 'type' })
     }
   }
   tb_messages_types.init({

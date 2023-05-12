@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       tb_chats.hasMany(models.tb_chats_history, { foreignKey: 'chat' });
       tb_chats.belongsTo(models.tb_chats_statuses, { foreignKey: 'status' });
       tb_chats.belongsTo(models.tb_contacts, { foreignKey: 'contact' })
+      tb_chats.hasMany(models.tb_talks, { foreignKey: 'chat' })
     }
   }
   tb_chats.init({

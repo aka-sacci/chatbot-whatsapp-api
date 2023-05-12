@@ -2,28 +2,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('tb_talks', {
+    await queryInterface.createTable('tb_messages_senders', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      chat: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      sender: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      message: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      seen: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN
+      description: {
+        type: Sequelize.STRING(50),
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +24,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('tb_talks');
+    await queryInterface.dropTable('tb_messages_senders');
   }
 };

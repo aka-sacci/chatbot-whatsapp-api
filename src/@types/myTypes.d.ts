@@ -128,6 +128,5 @@ export interface iOpenedChatsByUser {
 export interface iMessage {
     id?: number
     type: 'chat' | 'image' | 'audio' | 'video' | 'sticker' | 'ptt' | 'reply' | 'document';
-    content: string,
-    chat: number
+    content: string
 }
