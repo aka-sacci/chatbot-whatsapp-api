@@ -1,5 +1,3 @@
-import { sessionMockUp } from "../../../src/mocks/sessionMock";
-
 const { Sequelize } = require('sequelize');
 
 //IMPORT SUPERTEST

@@ -174,9 +174,6 @@ describe('sendMessage (c)', () => {
     });
 
     it('should throw a connection error', async () => {
-        //Cleaning database
-        //tb_messages
-        //tb_talks
         await db.tb_messages.destroy({
             truncate: true
         });

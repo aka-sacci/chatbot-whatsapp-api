@@ -10,21 +10,36 @@ import registerContactController from "./controllers/contact/registerContact";
 import updateContactController from "./controllers/contact/updateContact";
 import checkUserDisponibilityController from "./controllers/chat/checkUserDisponibility";
 import createChatController from "./controllers/chat/createChat";
+import sendMessageController from "./controllers/chat/sendMessage";
 //import { iController } from "./@types/myTypes";
 
 
 const router = Router()
+const multer = require('multer')
+const path = require('path');
+
+//Upload Middlewares
+//talk middleware
+const talkMediaStorage = multer.diskStorage({
+    destination: function (req: Request, file: any, cb: Function) {
+        cb(null, './src/assets/talks');
+    },
+    filename: function (req: Request, file: any, cb: Function) {
+        const extension = path.extname(file.originalname);
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        const newName = uniqueSuffix + extension;
+        cb(null, newName);
+    }
+})
+const talkMediaUpload = multer({ storage: talkMediaStorage })
+
 
 //CONTROLLERS
-
-
 //TEST ROUTE
 router.get('/test', (req: Request, res: Response) => {
-    res.status(200).json({header: "teste"})
+    res.status(200).json({ header: "teste" })
 })
 
-//GET QUOTES ROUTE
-//router.get('/getquotes/:quote', GetQuotesController.handle)
 
 router.post('/auth/login', loginController)
 
@@ -47,5 +62,7 @@ router.post('/contact/updatecontact', updateContactController)
 router.get('/chat/checkuserdisponibility', checkUserDisponibilityController)
 
 router.get('/chat/createchat/:sessionID/:contact', createChatController)
+
+router.post('/chat/sendmessage', talkMediaUpload.single('file'), sendMessageController)
 
 exports.router = router
