@@ -1,5 +1,4 @@
-import { iContactAddress, iReturnObject } from "../../../src/@types/myTypes";
-const { Sequelize } = require('sequelize');
+import { iReturnObject } from "../../../src/@types/myTypes";
 
 //Import database
 const db = require('../../../src/database/models')
@@ -7,19 +6,11 @@ const db = require('../../../src/database/models')
 import returnContactData from "../../../src/services/contact/returnContactData";
 
 //Import Mock
-import { contactMockUp } from "../../../src/mocks/contactMock";
 import { jhonatanData, sacciData, wrongPhone } from "../../../src/mocks/data/contactData";
+import { bulkInsertContact } from "../../../src/mocks";
 
 describe('returnContactData (S)', () => {
     let result: iReturnObject
-
-    const bulkInsertContact = async (phone: string, name: string, address?: iContactAddress) => {
-        if (address) {
-            await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true, address)
-        } else {
-            await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
-        }
-    }
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })

@@ -10,7 +10,7 @@ const db = require('../../../src/database/models')
 import logout from "../../../src/services/auth/logout"
 
 //import mocks
-import { sessionMockUp } from '../../../src/mocks/sessionMock'
+import { bulkInsertSession } from "../../../src/mocks";
 
 //import session model
 const session = require('../../../src/database/models/').tb_sessions
@@ -26,10 +26,6 @@ describe('logout (s)', () => {
     let token: string
     let invalidToken: string
     let expiredToken: string
-
-    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
-        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
-    }
 
     const checkIfSessionIsExpired = async (sessionID: number) => {
         const result = session

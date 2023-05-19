@@ -14,10 +14,8 @@ const seederInsertSessionStatuses = require('../../../src/database/seeders/20230
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
 //import mocks
-import { sessionMockUp } from '../../../src/mocks/sessionMock'
-import { iUser } from "../../../src/@types/myTypes";
-import { userMockUp } from "../../../src/mocks/userMock";
-import { activeUserOne, inactiveUserOne, inactiveUserTwo } from "../../../src/mocks/data/userData";
+import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
+import { bulkInsertSession, bulkInsertUser } from "../../../src/mocks";
 
 //import session model
 const session = require('../../../src/database/models/').tb_sessions
@@ -62,13 +60,6 @@ describe('sessionActivitySetter (c)', () => {
         }
     }
 
-    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
-        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
-    }
-    const bulkInsertUser = async (props: iUser) => {
-        let { usid, password, name, role, store } = props
-        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role, store)
-    }
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)

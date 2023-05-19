@@ -9,9 +9,8 @@ const testServer = require("../../../src/server")
 //Import database
 const db = require('../../../src/database/models')
 
-
 //import mocks
-import { sessionMockUp } from '../../../src/mocks/sessionMock'
+import { bulkInsertSession } from "../../../src/mocks";
 
 //import seeder
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
@@ -38,10 +37,6 @@ describe('logout (c)', () => {
                 .send()
             return myRequest
         }
-    }
-
-    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
-        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
     }
 
     const syncDB = async () => {

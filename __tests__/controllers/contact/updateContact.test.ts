@@ -1,6 +1,5 @@
-const { Sequelize } = require('sequelize');
 import { iContactAddress, iContactData } from "../../../src/@types/myTypes";
-import { contactMockUp } from "../../../src/mocks/contactMock";
+import { bulkInsertContact } from "../../../src/mocks";
 
 //Import database
 const db = require('../../../src/database/models')
@@ -24,13 +23,6 @@ describe('updateContact (c)', () => {
         return myRequest
     }
 
-    const bulkInsertContact = async (phone: string, name: string, address?: iContactAddress) => {
-        if (address) {
-            await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true, address)
-        } else {
-            await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
-        }
-    }
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         bulkInsertContact(estefaniData.phone, estefaniData.name, estefaniData.address)

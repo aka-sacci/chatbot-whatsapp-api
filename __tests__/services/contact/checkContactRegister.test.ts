@@ -1,27 +1,22 @@
 import { iReturnObject } from "../../../src/@types/myTypes"
-const { Sequelize } = require('sequelize');
 
 //Import database
 const db = require('../../../src/database/models')
+
 //Import Service
 import checkContactRegister from "../../../src/services/contact/checkContactRegister";
 
 //Import Mock
-import { contactMockUp } from "../../../src/mocks/contactMock";
 import { sacciData, wrongPhone } from "../../../src/mocks/data/contactData";
-
+import { bulkInsertContact } from "../../../src/mocks";
 describe('checkContactRegister (s)', () => {
     let result: iReturnObject
-    
-
-    const bulkInsertContact = async (phone: string, name: string) => {
-        await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
-    }
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         bulkInsertContact(sacciData.phone, sacciData.name)
     })
+
     it('should successfully return that the register exists', async () => {
         result = await checkContactRegister({
             phone: sacciData.phone

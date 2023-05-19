@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
-import { iUser } from "../../../src/@types/myTypes";
-import { contactMockUp } from "../../../src/mocks/contactMock";
+import { bulkInsertContact, bulkInsertSession, bulkInsertUser } from "../../../src/mocks";
 import { estefaniData, jhonatanData, sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, activeUserTwo, inactiveUserOne, inactiveUserTwo } from "../../../src/mocks/data/userData";
 
@@ -18,10 +17,6 @@ const seederInsertSessionStatuses = require('../../../src/database/seeders/20230
 const seederInsertChatStatuses = require('../../../src/database/seeders/20230328021018-insert-chats-statuses.js')
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
-//import mocks
-import { sessionMockUp } from '../../../src/mocks/sessionMock'
-import { userMockUp } from "../../../src/mocks/userMock";
-
 
 //import session model
 const chatHistory = require('../../../src/database/models/').tb_chats_history
@@ -31,20 +26,9 @@ describe('createChat (c)', () => {
     const response = async (props: { sessionID: number, contact: string }) => {
         let { sessionID, contact } = props
         const myRequest = await request(testServer)
-            .get("/chat/createchat/" + sessionID  + "/" + contact)
+            .get("/chat/createchat/" + sessionID + "/" + contact)
             .send()
         return myRequest
-    }
-
-    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
-        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
-    }
-    const bulkInsertContact = async (phone: string, name: string) => {
-        await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
-    }
-    const bulkInsertUser = async (props: iUser) => {
-        let { usid, password, name, role, store } = props
-        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role, store)
     }
 
     const checkIfChatWasInserted = async (chatID: number): Promise<boolean> => {

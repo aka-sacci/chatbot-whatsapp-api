@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-import { iReturnObject, iUser } from "../../../src/@types/myTypes";
+import { iReturnObject } from "../../../src/@types/myTypes";
 
 //Import database
 const db = require('../../../src/database/models')
@@ -8,9 +8,8 @@ const db = require('../../../src/database/models')
 import sessionActivityGetter from "../../../src/services/session/sessionActivityGetter";
 
 //import mocks
-import { sessionMockUp } from '../../../src/mocks/sessionMock'
-import { userMockUp } from "../../../src/mocks/userMock";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
+import { bulkInsertSession, bulkInsertUser } from "../../../src/mocks";
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
 const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
@@ -18,16 +17,7 @@ const seederInsertStores = require('../../../src/database/seeders/20220509183308
 
 describe('sessionActivityGetter (s)', () => {
     let result: iReturnObject
-
-    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
-        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
-    }
-    const bulkInsertUser = async (props: iUser) => {
-        let { usid, password, name, role, store } = props
-        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role, store)
-    }
-
-
+    
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         await seederInsertRoles.up(db.sequelize.getQueryInterface(), Sequelize)

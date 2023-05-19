@@ -1,8 +1,6 @@
 const { Sequelize } = require('sequelize');
-import { iSendMessageController, iUser } from "../../../src/@types/myTypes";
-import { chatHistoryMockUp } from "../../../src/mocks/chatHistoryMock";
-import { chatMockUp } from "../../../src/mocks/chatMock";
-import { contactMockUp } from "../../../src/mocks/contactMock";
+import { iSendMessageController } from "../../../src/@types/myTypes";
+import { bulkInsertChat, bulkInsertContact, bulkInsertSession, bulkInsertUser, bulkInsertChatHistory } from "../../../src/mocks";
 import { sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 
@@ -17,10 +15,6 @@ const seederInsertChatStatuses = require('../../../src/database/seeders/20230328
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 const seederInsertSenders = require('../../../src/database/seeders/20230511163127-insert-message-senders')
 const seederInsertMessagesTypes = require('../../../src/database/seeders/20230331125028-insert-messages-types')
-
-//import mocks
-import { sessionMockUp } from '../../../src/mocks/sessionMock'
-import { userMockUp } from "../../../src/mocks/userMock";
 
 //import session model
 const messages = require('../../../src/database/models/').tb_messages
@@ -51,23 +45,6 @@ describe('sendMessage (c)', () => {
             .field('content', content)
             .attach('file', filename)
         return myRequest
-    }
-
-    const bulkInsertSession = async (id: number, status: number, user: string, active: number) => {
-        await sessionMockUp(db.sequelize.getQueryInterface(), Sequelize, id, status, user, active)
-    }
-    const bulkInsertContact = async (phone: string, name: string) => {
-        await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
-    }
-    const bulkInsertUser = async (props: iUser) => {
-        let { usid, password, name, role, store } = props
-        await userMockUp(db.sequelize.getQueryInterface(), Sequelize, usid, password, name, role, store)
-    }
-    const bulkInsertChatHistory = async (id: number, chat: number, session: number, action: number) => {
-        await chatHistoryMockUp(db.sequelize.getQueryInterface(), Sequelize, id, chat, session, action)
-    }
-    const bulkInsertChat = async (id: number, contact: string, status: number) => {
-        await chatMockUp(db.sequelize.getQueryInterface(), Sequelize, id, contact, status)
     }
 
     const checkTalkQtd = async (chatID: number): Promise<number> => {

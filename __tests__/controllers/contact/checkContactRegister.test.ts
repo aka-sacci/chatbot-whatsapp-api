@@ -1,7 +1,3 @@
-import { contactMockUp } from "../../../src/mocks/contactMock";
-
-const { Sequelize } = require('sequelize');
-
 //IMPORT SUPERTEST
 const request = require('supertest')
 const testServer = require("../../../src/server")
@@ -9,21 +5,17 @@ const testServer = require("../../../src/server")
 //Import database
 const db = require('../../../src/database/models') 
 
+import { bulkInsertContact } from "../../../src/mocks";
 //import mocks
 import { sacciData, wrongPhone } from "../../../src/mocks/data/contactData";
 
 describe('checkContactRegister (c)', () => {
-
 
     const response = async (phone: string) => {
         const myRequest = await request(testServer)
             .get("/contact/checkcontactregister/" + phone)
             .send()
         return myRequest
-    }
-
-    const bulkInsertContact = async (phone: string, name: string) => {
-        await contactMockUp(db.sequelize.getQueryInterface(), Sequelize, phone, name, true)
     }
 
 
