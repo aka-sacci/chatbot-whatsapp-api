@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   tb_messages.init({
     type: DataTypes.INTEGER,
-    content: DataTypes.STRING
+    content: DataTypes.STRING,
+    filename: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'tb_messages',

@@ -3,8 +3,8 @@ import { iMessage, iReturnObject, iUser } from "../../../src/@types/myTypes";
 import { chatHistoryMockUp } from "../../../src/mocks/chatHistoryMock";
 import { chatMockUp } from "../../../src/mocks/chatMock";
 import { contactMockUp } from "../../../src/mocks/contactMock";
-import { estefaniData, jhonatanData, sacciData } from "../../../src/mocks/data/contactData";
-import { activeUserOne, activeUserTwo, inactiveUserOne, inactiveUserTwo } from "../../../src/mocks/data/userData";
+import { sacciData } from "../../../src/mocks/data/contactData";
+import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 
 //Import database
 const db = require('../../../src/database/models')
@@ -60,12 +60,14 @@ describe('sendMessage (c)', () => {
         return result
     }
 
-    const checkIfMessageWasInserted = async (content: string): Promise<boolean> => {
+    const checkIfMessageWasInserted = async (content: string, type: number, filename: string | null): Promise<boolean> => {
         const result = messages
             .findOne(
                 {
                     where: {
-                        content
+                        content,
+                        type,
+                        filename
                     }
                 })
             .then((queryResult: any) => {
@@ -99,7 +101,7 @@ describe('sendMessage (c)', () => {
         })
         await db.tb_messages.destroy({
             truncate: true
-        }) 
+        })
     })
     it('should successfully insert a new text message in the database, with a valid session and a valid chat', async () => {
         let message: iMessage = {
@@ -112,7 +114,7 @@ describe('sendMessage (c)', () => {
             message
         })
         let talksQtd = await checkTalkQtd(1)
-        let wasMessageInserted = await checkIfMessageWasInserted(message.content)
+        let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
         expect(result.success).toBe(true)
         expect(talksQtd).toBe(1)
         expect(wasMessageInserted).toBe(true)
@@ -121,7 +123,8 @@ describe('sendMessage (c)', () => {
     it('should successfully insert a new image in the database, with a valid session and a valid contact', async () => {
         let message: iMessage = {
             type: 'image',
-            content: 'Descrição da imagem'
+            content: 'Descrição da imagem',
+            filename: 'teste.jpeg'
         }
         result = await sendMessage({
             chat: 1,
@@ -129,12 +132,11 @@ describe('sendMessage (c)', () => {
             message
         })
         let talksQtd = await checkTalkQtd(1)
-        let wasMessageInserted = await checkIfMessageWasInserted(message.content)
+        let wasMessageInserted = await checkIfMessageWasInserted(message.content, 2, String(message.filename))
         expect(result.success).toBe(true)
         expect(talksQtd).toBe(1)
         expect(wasMessageInserted).toBe(true)
     });
-
 
     it('should fail in insert a new message in the database, with a nonexisting chat', async () => {
         let message: iMessage = {
@@ -147,7 +149,7 @@ describe('sendMessage (c)', () => {
             message
         })
         let talksQtd = await checkTalkQtd(1)
-        let wasMessageInserted = await checkIfMessageWasInserted(message.content)
+        let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
         expect(result.success).toBe(false)
         expect(result.error?.name).toBe('ERR_CHAT_NOT_EXISTS')
         expect(talksQtd).toBe(0)
@@ -166,7 +168,7 @@ describe('sendMessage (c)', () => {
             message
         })
         let talksQtd = await checkTalkQtd(1)
-        let wasMessageInserted = await checkIfMessageWasInserted(message.content)
+        let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
         expect(result.success).toBe(false)
         expect(result.error?.name).toBe('ERR_CHAT_INVALID')
         expect(talksQtd).toBe(0)
@@ -192,7 +194,7 @@ describe('sendMessage (c)', () => {
         await db.tb_user.destroy({
             truncate: true
         });
-        
+
         await seederInsertRoles.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertSessionStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertChatsHistoryAction.down(db.sequelize.getQueryInterface(), Sequelize)

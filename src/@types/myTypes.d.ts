@@ -128,5 +128,25 @@ export interface iOpenedChatsByUser {
 export interface iMessage {
     id?: number
     type: 'chat' | 'image' | 'audio' | 'video' | 'sticker' | 'ptt' | 'reply' | 'document';
-    content: string
+    content: string,
+    filename?: string
+}
+
+export interface iAppendedFile {
+    fieldname: string,
+    originalname: string,
+    encoding: string,
+    mimetype: string,
+    destination: string,
+    filename: string,
+    path: string,
+    size: number
+}
+
+export interface iSendMessageController {
+    chat: number,
+    sender: number,
+    type: 'chat' | 'image' | 'audio' | 'video' | 'sticker' | 'ptt' | 'reply' | 'document';
+    content: string,
+    filename?: string
 }

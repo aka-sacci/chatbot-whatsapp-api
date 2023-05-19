@@ -10,7 +10,8 @@ export default async function sendMessage(props: { chat: number, sender: number,
     try {
         await checkIfChatIsActive(chat)
         let messageType = await returnMessageType(message.type)
-        let messageID = await insertMessage(messageType, message.content)
+        let filename = message?.filename === undefined ? null : message.filename
+        let messageID = await insertMessage(messageType, message.content, filename)
         await insertTalk(chat, sender, messageID)
         return {
             success: true
@@ -65,11 +66,12 @@ async function insertTalk(chat: number, sender: number, message: number): Promis
         .then()
 }
 
-async function insertMessage(type: number, content: string): Promise<number> {
+async function insertMessage(type: number, content: string, filename: string | null): Promise<number> {
     let result = await messages
         .create({
             type,
-            content
+            content,
+            filename
         })
         .then((queryResult: any) => {
             return Number(queryResult.id)
