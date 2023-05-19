@@ -2,6 +2,7 @@ const { Sequelize } = require('sequelize');
 import { bulkInsertContact, bulkInsertSession, bulkInsertUser } from "../../../src/mocks";
 import { estefaniData, jhonatanData, sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, activeUserTwo, inactiveUserOne, inactiveUserTwo } from "../../../src/mocks/data/userData";
+import { checkIfChatHistoryWasInserted, checkIfChatWasInserted } from "../../../src/utils/testsFunctions";
 
 //IMPORT SUPERTEST
 const request = require('supertest')
@@ -18,9 +19,6 @@ const seederInsertChatStatuses = require('../../../src/database/seeders/20230328
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
 
-//import session model
-const chatHistory = require('../../../src/database/models/').tb_chats_history
-const chat = require('../../../src/database/models/').tb_chats
 describe('createChat (c)', () => {
 
     const response = async (props: { sessionID: number, contact: string }) => {
@@ -29,36 +27,6 @@ describe('createChat (c)', () => {
             .get("/chat/createchat/" + sessionID + "/" + contact)
             .send()
         return myRequest
-    }
-
-    const checkIfChatWasInserted = async (chatID: number): Promise<boolean> => {
-        const result = chat
-            .findOne(
-                {
-                    where: {
-                        id: chatID
-                    }
-                })
-            .then((queryResult: any) => {
-                if (queryResult === null) return false
-                else return true
-            })
-        return result
-    }
-
-    const checkIfChatHistoryWasInserted = async (chatID: number): Promise<boolean> => {
-        const result = chatHistory
-            .findOne(
-                {
-                    where: {
-                        chat: chatID
-                    }
-                })
-            .then((queryResult: any) => {
-                if (queryResult === null) return false
-                else return true
-            })
-        return result
     }
 
     beforeAll(async () => {

@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-import { iReturnObject, iUser } from "../../../src/@types/myTypes";
+import { iReturnObject } from "../../../src/@types/myTypes";
 import { bulkInsertContact, bulkInsertUser, bulkInsertSession, bulkInsertChat, bulkInsertChatHistory } from "../../../src/mocks";
 import { estefaniData, jhonatanData, sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, activeUserTwo, inactiveUserOne, inactiveUserTwo } from "../../../src/mocks/data/userData";

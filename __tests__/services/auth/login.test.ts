@@ -14,34 +14,11 @@ import login from "../../../src/services/auth/login"
 
 //import mocks
 import { bulkInsertSession } from "../../../src/mocks";
+import { checkIfSessionIsExpired } from "../../../src/utils/testsFunctions";
 
-//import session model
-const session = require('../../../src/database/models/').tb_sessions
 
 describe('login (S)', () => {
     let result: iReturnObject
-
-    const checkIfSessionIsExpired = async (sessionID: number) => {
-        const result = session
-            .findOne(
-                {
-                    attributes: ['status']
-                },
-                {
-                    where: {
-                        id: sessionID
-                    }
-                })
-            .then((queryResult: any) => {
-                switch (queryResult.status) {
-                    case 1:
-                        return false
-                    case 2:
-                        return true
-                }
-            })
-        return result
-    }
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })

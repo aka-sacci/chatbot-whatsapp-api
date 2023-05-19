@@ -18,43 +18,10 @@ const seederInsertMessagesTypes = require('../../../src/database/seeders/2023033
 
 //import mocks
 import sendMessage from "../../../src/services/chat/sendMessage";
-
-//import session model
-const messages = require('../../../src/database/models/').tb_messages
-const talks = require('../../../src/database/models/').tb_talks
+import { checkIfMessageWasInserted, checkTalkQtd } from "../../../src/utils/testsFunctions";
 
 describe('sendMessage (c)', () => {
     let result: iReturnObject
-
-    const checkTalkQtd = async (chatID: number): Promise<number> => {
-        const result = talks
-            .count({
-                where: {
-                    chat: chatID
-                }
-            })
-            .then((queryResult: any) => {
-                return queryResult
-            })
-        return result
-    }
-
-    const checkIfMessageWasInserted = async (content: string, type: number, filename: string | null): Promise<boolean> => {
-        const result = messages
-            .findOne(
-                {
-                    where: {
-                        content,
-                        type,
-                        filename
-                    }
-                })
-            .then((queryResult: any) => {
-                if (queryResult === null) return false
-                else return true
-            })
-        return result
-    }
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })

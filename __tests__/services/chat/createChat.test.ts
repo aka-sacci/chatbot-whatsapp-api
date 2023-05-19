@@ -16,43 +16,11 @@ const seederInsertStores = require('../../../src/database/seeders/20220509183308
 
 //import mocks
 import createChat from "../../../src/services/chat/createChat";
+import { checkIfChatHistoryWasInserted, checkIfChatWasInserted } from "../../../src/utils/testsFunctions";
 
-//import session model
-const chatHistory = require('../../../src/database/models/').tb_chats_history
-const chat = require('../../../src/database/models/').tb_chats
 
 describe('createChat (s)', () => {
     let result: iReturnObject
-
-    const checkIfChatWasInserted = async (chatID: number): Promise<boolean> => {
-        const result = chat
-            .findOne(
-                {
-                    where: {
-                        id: chatID
-                    }
-                })
-            .then((queryResult: any) => {
-                if (queryResult === null) return false
-                else return true
-            })
-        return result
-    }
-
-    const checkIfChatHistoryWasInserted = async (chatID: number): Promise<boolean> => {
-        const result = chatHistory
-            .findOne(
-                {
-                    where: {
-                        chat: chatID
-                    }
-                })
-            .then((queryResult: any) => {
-                if (queryResult === null) return false
-                else return true
-            })
-        return result
-    }
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })

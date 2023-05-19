@@ -11,9 +11,8 @@ import logout from "../../../src/services/auth/logout"
 
 //import mocks
 import { bulkInsertSession } from "../../../src/mocks";
+import { checkIfSessionIsExpired } from "../../../src/utils/testsFunctions";
 
-//import session model
-const session = require('../../../src/database/models/').tb_sessions
 
 //import seeder
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
@@ -26,28 +25,6 @@ describe('logout (s)', () => {
     let token: string
     let invalidToken: string
     let expiredToken: string
-
-    const checkIfSessionIsExpired = async (sessionID: number) => {
-        const result = session
-            .findOne(
-                {
-                    attributes: ['status']
-                },
-                {
-                    where: {
-                        id: sessionID
-                    }
-                })
-            .then((queryResult: any) => {
-                switch (queryResult.status) {
-                    case 1:
-                        return false
-                    case 2:
-                        return true
-                }
-            })
-        return result
-    }
 
     const syncDB = async () => {
         await db.sequelize.sync({ force: true })

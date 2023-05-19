@@ -16,25 +16,10 @@ const seederInsertStores = require('../../../src/database/seeders/20220509183308
 //import mocks
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 import { bulkInsertSession, bulkInsertUser } from "../../../src/mocks";
+import { checkIfSessionIsActive } from "../../../src/utils/testsFunctions";
 
-//import session model
-const session = require('../../../src/database/models/').tb_sessions
 
 describe('sessionActivitySetter (c)', () => {
-
-    const checkIfSessionIsActive = async (sessionID: number): Promise<boolean> => {
-        const result = session
-            .findOne(
-                {
-                    where: {
-                        id: sessionID
-                    }
-                })
-            .then((queryResult: any) => {
-                return queryResult.active
-            })
-        return result
-    }
 
     let token: string
     let invalidToken: string

@@ -10,29 +10,15 @@ import sessionActivitySetter from "../../../src/services/session/sessionActivity
 //import mocks
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
 import { bulkInsertSession, bulkInsertUser } from "../../../src/mocks";
+import { checkIfSessionIsActive } from "../../../src/utils/testsFunctions";
 const seederInsertRoles = require('../../../src/database/seeders/20230228021532-insert-roles.js')
 const seederInsertSessionStatuses = require('../../../src/database/seeders/20230328004002-insert-session-statuses.js')
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 
-//import session model
-const session = require('../../../src/database/models/').tb_sessions
+
 
 describe('sessionActivitySetter (s)', () => {
     let result: iReturnObject
-
-    const checkIfSessionIsActive = async (sessionID: number): Promise<boolean> => {
-        const result = session
-            .findOne(
-                {
-                    where: {
-                        id: sessionID
-                    }
-                })
-            .then((queryResult: any) => {
-                return queryResult.active
-            })
-        return result
-    }
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })

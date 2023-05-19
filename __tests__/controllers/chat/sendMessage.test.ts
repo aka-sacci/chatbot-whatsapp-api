@@ -3,6 +3,7 @@ import { iSendMessageController } from "../../../src/@types/myTypes";
 import { bulkInsertChat, bulkInsertContact, bulkInsertSession, bulkInsertUser, bulkInsertChatHistory } from "../../../src/mocks";
 import { sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
+import { checkTalkQtd } from "../../../src/utils/testsFunctions";
 
 //Import database
 const db = require('../../../src/database/models')
@@ -45,19 +46,6 @@ describe('sendMessage (c)', () => {
             .field('content', content)
             .attach('file', filename)
         return myRequest
-    }
-
-    const checkTalkQtd = async (chatID: number): Promise<number> => {
-        const result = talks
-            .count({
-                where: {
-                    chat: chatID
-                }
-            })
-            .then((queryResult: any) => {
-                return queryResult
-            })
-        return result
     }
 
     const checkIfMessageWasInserted = async (content: string, type: number): Promise<boolean> => {
