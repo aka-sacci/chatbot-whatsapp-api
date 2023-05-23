@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addConstraint("tb_chats_history", {
+    await queryInterface.addConstraint("tb_chats_histories", {
       fields: ["session"],
       type: "foreign key",
       name: "chats-history-session-association",
@@ -15,6 +15,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    queryInterface.removeConstraint("tb_chats_history", 'chats-history-session-association')
+    queryInterface.removeConstraint("tb_chats_histories", 'chats-history-session-association')
   }
 };
