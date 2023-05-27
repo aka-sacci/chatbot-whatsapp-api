@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { iAppendedFile, iReturnObject, iSendMessageController } from "../../../@types/myTypes";
 import sendMessage from "../../../services/chat/sendMessage";
-import { stringify } from "querystring";
+import deleteMedia from "../../../utils/deleteMedia";
 const path = require('path');
 const fs = require('fs');
 
@@ -25,21 +25,11 @@ export default async function sendMessageController(req: Request<{}, {}, iSendMe
     if (serviceResult.success) {
         res.status(200).send()
     } else {
-        await deleteMedia(requestedFile?.filename)
+        await deleteMedia(requestedFile?.filename, 'talks')
         let statusCode = returnStatusCode(String(serviceResult.error?.name))
         res.status(statusCode).send({ error: serviceResult.error })
     }
 
-}
-
-async function deleteMedia(mediaSrc: string | undefined) {
-
-    if (mediaSrc != undefined) {
-        let mediaPath = path.join(process.cwd(), '/src/assets/talks/' + mediaSrc)
-        await fs.unlink(mediaPath, () => {
-            return
-        });
-    }
 }
 
 function returnStatusCode(errorName: string): number {

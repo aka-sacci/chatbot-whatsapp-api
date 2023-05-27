@@ -3,6 +3,7 @@ import { iSendMessageController } from "../../../src/@types/myTypes";
 import { bulkInsertChat, bulkInsertContact, bulkInsertSession, bulkInsertUser, bulkInsertChatHistory } from "../../../src/mocks";
 import { sacciData } from "../../../src/mocks/data/contactData";
 import { activeUserOne, inactiveUserOne } from "../../../src/mocks/data/userData";
+import deleteMedia from "../../../src/utils/deleteMedia";
 import { checkTalkQtd } from "../../../src/utils/testsFunctions";
 
 //Import database
@@ -19,8 +20,6 @@ const seederInsertMessagesTypes = require('../../../src/database/seeders/2023033
 
 //import session model
 const messages = require('../../../src/database/models/').tb_messages
-const talks = require('../../../src/database/models/').tb_talks
-
 
 //IMPORT SUPERTEST
 const request = require('supertest')
@@ -35,7 +34,7 @@ describe('sendMessage (c)', () => {
     let videoTest = path.join(process.cwd(), '/src/mocks/data/media/videoMock.mp4')
     let pttTest = path.join(process.cwd(), '/src/mocks/data/media/pttMock.opus')
     let docTest = path.join(process.cwd(), '/src/mocks/data/media/documentMock.pdf')
-
+    
     const response = async (messageToBeSend: iSendMessageController) => {
         let { chat, sender, type, content, filename } = messageToBeSend
         const myRequest = await request(testServer)
@@ -64,7 +63,7 @@ describe('sendMessage (c)', () => {
         return result
     }
 
-    const getMediaName = async (content: string, type: number): Promise<String> => {
+    const getMediaName = async (content: string, type: number): Promise<string> => {
         const result = messages
             .findOne(
                 {
@@ -83,16 +82,9 @@ describe('sendMessage (c)', () => {
         let mediaName = await getMediaName(content, type)
         let mediaSrc = path.join(process.cwd(), '/src/assets/talks/' + mediaName)
         let result = fs.existsSync(mediaSrc)
-        if (result === true) await deleteMedia(mediaSrc)
+        if (result === true) await deleteMedia(mediaName, "talks")
         return result
     }
-
-    const deleteMedia = async (path: string) => {
-        await fs.unlink(path, () => {
-            return
-        });
-    }
-
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
         //Insere dados comuns

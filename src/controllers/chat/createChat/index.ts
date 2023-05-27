@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { iReturnObject } from "../../../@types/myTypes";
+import { iAppendedFile, iCreateChatController, iReturnObject } from "../../../@types/myTypes";
 import createChat from "../../../services/chat/createChat";
+import deleteMedia from "../../../utils/deleteMedia";
 
-export default async function createChatController(req: Request<{ sessionID: number, contact: string }>, res: Response, next?: NextFunction) {
-    let { sessionID, contact } = req.params
+export default async function createChatController(req: Request<{}, {}, iCreateChatController>, res: Response, next?: NextFunction) {
+    let { sessionID, contact } = req.body
+    let requestedFile: iAppendedFile | undefined = req.file
     let serviceResult: iReturnObject = await createChat({ sessionID, contact })
 
     switch (serviceResult.success) {
@@ -12,10 +14,12 @@ export default async function createChatController(req: Request<{ sessionID: num
             res.status(201).json({ chatID })
             break;
         case false:
+            await deleteMedia(requestedFile?.filename, 'userPhotos')
             let { error } = serviceResult
             res.status(500).json({ error })
             break;
         default:
+            await deleteMedia(requestedFile?.filename, 'userPhotos')
             res.status(500).json({ error })
             break;
     }

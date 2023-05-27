@@ -33,6 +33,19 @@ const talkMediaStorage = multer.diskStorage({
 })
 const talkMediaUpload = multer({ storage: talkMediaStorage })
 
+const userPhotoStorage = multer.diskStorage({
+    destination: function (req: Request, file: any, cb: Function) {
+        cb(null, './src/assets/users/profilePics/')
+    },
+    filename: function (req: Request, file: any, cb: Function) {
+        const extension = path.extname(file.originalname);
+        const contactPhone = req.body.contact
+        const fullName = contactPhone + extension
+        cb(null, fullName)
+    }
+})
+
+const userPhotoUpload = multer({ storage: userPhotoStorage })
 
 //CONTROLLERS
 //TEST ROUTE
@@ -61,7 +74,7 @@ router.post('/contact/updatecontact', updateContactController)
 
 router.get('/chat/checkuserdisponibility', checkUserDisponibilityController)
 
-router.get('/chat/createchat/:sessionID/:contact', createChatController)
+router.post('/chat/createchat', userPhotoUpload.single('userPhoto'), createChatController)
 
 router.post('/chat/sendmessage', talkMediaUpload.single('file'), sendMessageController)
 

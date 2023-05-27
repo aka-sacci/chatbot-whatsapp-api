@@ -150,3 +150,8 @@ export interface iSendMessageController {
     content: string,
     filename?: string
 }
+
+export interface iCreateChatController {
+    sessionID: number,
+    contact: string
+}
