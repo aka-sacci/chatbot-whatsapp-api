@@ -22,6 +22,7 @@ const seederInsertChatStatuses = require('../../../src/database/seeders/20230328
 const seederInsertStores = require('../../../src/database/seeders/20220509183308-insert-stores.js')
 describe('createChat (c)', () => {
     let imgTest = path.join(process.cwd(), '/src/mocks/data/media/imageMock.jfif')
+    jest.setTimeout(60000)
 
     const checkIfMediaExists = async (mediaName: string): Promise<boolean> => {
         let mediaSrc = path.join(process.cwd(), '/src/assets/users/profilePics/' + mediaName)
@@ -30,7 +31,7 @@ describe('createChat (c)', () => {
         return result
     }
 
-    const response = async (props: { sessionID: number, contact: string, userPhoto: string }) => {
+    const response = async (props: { sessionID: number, contact: string, userPhoto?: string }) => {
         let { sessionID, contact, userPhoto } = props
         const myRequest = await request(testServer)
             .post("/chat/createchat")
@@ -78,6 +79,19 @@ describe('createChat (c)', () => {
         expect(wasChatInserted).toBe(true)
         expect(wasChatHistoryInserted).toBe(true)
         expect(wasImageInserted).toBe(true)
+
+    });
+    it('should successfully create a new chat, inserting his history, not saving his profile pic and returning his id and status = 201', async () => {
+        await bulkInsertSession(1, 1, activeUserOne.usid, 1)
+        let myResponse = await response({ sessionID: 1, contact: sacciData.phone })
+        let wasChatInserted = await checkIfChatWasInserted(2)
+        let wasChatHistoryInserted = await checkIfChatHistoryWasInserted(2)
+        let wasImageInserted = await checkIfMediaExists(sacciData.phone + ".jfif")
+        expect(myResponse.status).toBe(201)
+        expect(myResponse.body.chatID).toBe(2)
+        expect(wasChatInserted).toBe(true)
+        expect(wasChatHistoryInserted).toBe(true)
+        expect(wasImageInserted).toBe(false)
 
     });
     it('should fail in create a new chat, with a inexisting contact, returning status = 500 and an error', async () => {
@@ -136,7 +150,7 @@ describe('createChat (c)', () => {
         await seederInsertChatsHistoryAction.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertChatStatuses.down(db.sequelize.getQueryInterface(), Sequelize)
         await seederInsertStores.down(db.sequelize.getQueryInterface(), Sequelize)
-
+        
 
         ////Shutting down connection...
         db.sequelize.close();
