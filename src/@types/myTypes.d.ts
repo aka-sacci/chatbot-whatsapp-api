@@ -144,11 +144,13 @@ export interface iAppendedFile {
 }
 
 export interface iSendMessageController {
+    talkID: string,
     chat: number,
     sender: number,
     type: 'chat' | 'image' | 'audio' | 'video' | 'sticker' | 'ptt' | 'reply' | 'document';
     content: string,
-    filename?: string
+    filename?: string,
+    replyTo?: string
 }
 
 export interface iCreateChatController {

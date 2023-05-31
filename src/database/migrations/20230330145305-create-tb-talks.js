@@ -5,9 +5,8 @@ module.exports = {
     await queryInterface.createTable('tb_talks', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.CHAR(47)
       },
       chat: {
         allowNull: false,
@@ -32,6 +31,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      replyTo: {
+        allowNull: true,
+        type: Sequelize.CHAR(22)
       }
     });
   },

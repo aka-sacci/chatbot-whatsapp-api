@@ -29,22 +29,39 @@ const path = require('path');
 const fs = require('fs');
 
 describe('sendMessage (c)', () => {
+    let talkID = "false_5511997645981@c.us_3EB0C60EB9165BA08FC721"
     let imgTest = path.join(process.cwd(), '/src/mocks/data/media/imageMock.jfif')
     let audioTest = path.join(process.cwd(), '/src/mocks/data/media/audioMock.mp3')
     let videoTest = path.join(process.cwd(), '/src/mocks/data/media/videoMock.mp4')
     let pttTest = path.join(process.cwd(), '/src/mocks/data/media/pttMock.opus')
     let docTest = path.join(process.cwd(), '/src/mocks/data/media/documentMock.pdf')
-    
+
     const response = async (messageToBeSend: iSendMessageController) => {
-        let { chat, sender, type, content, filename } = messageToBeSend
-        const myRequest = await request(testServer)
-            .post("/chat/sendmessage")
-            .field('chat', chat)
-            .field('sender', sender)
-            .field('type', type)
-            .field('content', content)
-            .attach('file', filename)
-        return myRequest
+        let { chat, sender, type, content, filename, talkID, replyTo } = messageToBeSend
+
+
+        if (replyTo === undefined) {
+            const myRequest = await request(testServer)
+                .post("/chat/sendmessage")
+                .field('chat', chat)
+                .field('sender', sender)
+                .field('type', type)
+                .field('content', content)
+                .field('talkID', talkID)
+                .attach('file', filename)
+            return myRequest
+        } else {
+            const myRequest = await request(testServer)
+                .post("/chat/sendmessage")
+                .field('chat', chat)
+                .field('sender', sender)
+                .field('type', type)
+                .field('content', content)
+                .field('talkID', talkID)
+                .field('replyTo', replyTo)
+                .attach('file', filename)
+            return myRequest
+        }
     }
 
     const checkIfMessageWasInserted = async (content: string, type: number): Promise<boolean> => {
@@ -116,7 +133,25 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'chat',
-            content: 'Olá! Mensagem teste'
+            content: 'Olá! Mensagem teste do controller!',
+            talkID
+        }
+        let myRequest = await response(validTextMessage)
+        let talksQtd = await checkTalkQtd(1)
+        let wasMessageInserted = await checkIfMessageWasInserted(validTextMessage.content, 1)
+        expect(myRequest.status).toBe(200)
+        expect(talksQtd).toBe(1)
+        expect(wasMessageInserted).toBe(true)
+    });
+
+    it('should successfully insert a new text reply in the database, with a valid session and a valid chat, returning status 200', async () => {
+        let validTextMessage: iSendMessageController = {
+            chat: 1,
+            sender: 1,
+            type: 'chat',
+            content: 'Olá! Mensagem teste do controller!',
+            talkID,
+            replyTo: "3EB0D4CFD423DBD2585C54"
         }
         let myRequest = await response(validTextMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -130,8 +165,28 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'image',
-            content: 'Olá! Mídia teste (imagem)',
-            filename: imgTest
+            content: 'Olá! Mídia teste (imagem) do controller!',
+            filename: imgTest,
+            talkID
+        }
+        let myRequest = await response(validImageMessage)
+        let talksQtd = await checkTalkQtd(1)
+        let wasMessageInserted = await checkIfMessageWasInserted(validImageMessage.content, 2)
+        let wasMediaInserted = await checkIfMediaExists(validImageMessage.content, 2)
+        expect(myRequest.status).toBe(200)
+        expect(talksQtd).toBe(1)
+        expect(wasMessageInserted).toBe(true)
+        expect(wasMediaInserted).toBe(true)
+    });
+    it('should successfully insert a new image reply in the database, with a valid session and a valid contact, returning status 200', async () => {
+        let validImageMessage: iSendMessageController = {
+            chat: 1,
+            sender: 1,
+            type: 'image',
+            content: 'Olá! Mídia teste (imagem) do controller!',
+            filename: imgTest,
+            talkID,
+            replyTo: "3EB0D4CFD423DBD2585C54"
         }
         let myRequest = await response(validImageMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -147,8 +202,9 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'audio',
-            content: 'Olá! Mídia teste (audio)',
-            filename: audioTest
+            content: 'Olá! Mídia teste (audio) do controller!',
+            filename: audioTest,
+            talkID
         }
         let myRequest = await response(validAudioMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -164,8 +220,9 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'video',
-            content: 'Olá! Mídia teste (video)',
-            filename: videoTest
+            content: 'Olá! Mídia teste (video) do controller!',
+            filename: videoTest,
+            talkID
         }
         let myRequest = await response(validVideoMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -181,8 +238,9 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'ptt',
-            content: 'Olá! Mídia teste (audio de whatsapp)',
-            filename: pttTest
+            content: 'Olá! Mídia teste (audio de whatsapp) do controller!',
+            filename: pttTest,
+            talkID
         }
         let myRequest = await response(validPptMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -198,8 +256,9 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'document',
-            content: 'Olá! Mídia teste (documento)',
-            filename: docTest
+            content: 'Olá! Mídia teste (documento) do controller!',
+            filename: docTest,
+            talkID
         }
         let myRequest = await response(validDocMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -215,7 +274,8 @@ describe('sendMessage (c)', () => {
             chat: 5,
             sender: 1,
             type: 'chat',
-            content: 'Olá! chat teste',
+            content: 'Olá! chat teste do controller!',
+            talkID
         }
         let myRequest = await response(validInexistingChatMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -230,8 +290,9 @@ describe('sendMessage (c)', () => {
             chat: 5,
             sender: 1,
             type: 'chat',
-            content: 'Olá! Mídia teste (imagem)',
-            filename: imgTest
+            content: 'Olá! Mídia teste (imagem) do controller!',
+            filename: imgTest,
+            talkID
         }
         let myRequest = await response(validInexistingMediaMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -248,7 +309,8 @@ describe('sendMessage (c)', () => {
             chat: 2,
             sender: 1,
             type: 'chat',
-            content: 'Olá! chat teste',
+            content: 'Olá! chat teste do controller!',
+            talkID
         }
         let myRequest = await response(invalidChatMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -265,8 +327,9 @@ describe('sendMessage (c)', () => {
             chat: 3,
             sender: 1,
             type: 'chat',
-            content: 'Olá! Mídia teste (imagem)',
-            filename: imgTest
+            content: 'Olá! Mídia teste (imagem) do controller!',
+            filename: imgTest,
+            talkID
         }
         let myRequest = await response(invalidMediaMessage)
         let talksQtd = await checkTalkQtd(1)
@@ -310,7 +373,8 @@ describe('sendMessage (c)', () => {
             chat: 1,
             sender: 1,
             type: 'chat',
-            content: 'Olá! Mídia teste (imagem)',
+            content: 'Olá! Mídia teste (imagem) do controller!',
+            talkID
         }
         let myRequest = await response(invalidMessage)
         expect(myRequest.status).toBe(500)

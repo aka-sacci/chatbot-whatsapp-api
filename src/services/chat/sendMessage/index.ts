@@ -4,15 +4,15 @@ const talks = require('../../../database/models/').tb_talks
 const messages = require('../../../database/models/').tb_messages
 const messagesTypes = require('../../../database/models/').tb_messages_types
 
-export default async function sendMessage(props: { chat: number, sender: number, message: iMessage }): Promise<iReturnObject> {
+export default async function sendMessage(props: { id: string, chat: number, sender: number, replyTo?: string, message: iMessage }): Promise<iReturnObject> {
 
-    let { chat, sender, message } = props
+    let { chat, sender, message, id, replyTo } = props
     try {
         await checkIfChatIsActive(chat)
         let messageType = await returnMessageType(message.type)
         let filename = message?.filename === undefined ? null : message.filename
         let messageID = await insertMessage(messageType, message.content, filename)
-        await insertTalk(chat, sender, messageID)
+        await insertTalk(chat, sender, messageID, id, replyTo)
         return {
             success: true
         }
@@ -55,13 +55,15 @@ async function checkIfChatIsActive(chatID: number): Promise<void> {
         })
 }
 
-async function insertTalk(chat: number, sender: number, message: number): Promise<void> {
+async function insertTalk(chat: number, sender: number, message: number, id: string, replyTo?: string): Promise<void> {
     await talks
         .create({
+            id,
             chat,
             sender,
             message,
-            seen: 0
+            seen: 0,
+            replyTo
         })
         .then()
 }

@@ -22,6 +22,7 @@ import { checkIfMessageWasInserted, checkTalkQtd } from "../../../src/utils/test
 
 describe('sendMessage (c)', () => {
     let result: iReturnObject
+    let talkID = "false_5511997645981@c.us_3EB0C60EB9165BA08FC721"
 
     beforeAll(async () => {
         await db.sequelize.sync({ force: true })
@@ -57,7 +58,8 @@ describe('sendMessage (c)', () => {
         result = await sendMessage({
             chat: 1,
             sender: 1,
-            message
+            message,
+            id: talkID
         })
         let talksQtd = await checkTalkQtd(1)
         let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
@@ -75,10 +77,30 @@ describe('sendMessage (c)', () => {
         result = await sendMessage({
             chat: 1,
             sender: 1,
-            message
+            message,
+            id: talkID
         })
         let talksQtd = await checkTalkQtd(1)
         let wasMessageInserted = await checkIfMessageWasInserted(message.content, 2, String(message.filename))
+        expect(result.success).toBe(true)
+        expect(talksQtd).toBe(1)
+        expect(wasMessageInserted).toBe(true)
+    });
+
+    it('should successfully insert a new message in the database, with a valid session and a valid contact, and replyig another message', async () => {
+        let message: iMessage = {
+            type: 'chat',
+            content: 'Olá! esta é uma mensagem curta'
+        }
+        result = await sendMessage({
+            chat: 1,
+            sender: 1,
+            message,
+            id: talkID,
+            replyTo: "3EB0D4CFD423DBD2585C54"
+        })
+        let talksQtd = await checkTalkQtd(1)
+        let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
         expect(result.success).toBe(true)
         expect(talksQtd).toBe(1)
         expect(wasMessageInserted).toBe(true)
@@ -92,9 +114,10 @@ describe('sendMessage (c)', () => {
         result = await sendMessage({
             chat: 5,
             sender: 1,
-            message
+            message,
+            id: talkID
         })
-        let talksQtd = await checkTalkQtd(1)
+        let talksQtd = await checkTalkQtd(5)
         let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
         expect(result.success).toBe(false)
         expect(result.error?.name).toBe('ERR_CHAT_NOT_EXISTS')
@@ -111,9 +134,10 @@ describe('sendMessage (c)', () => {
         result = await sendMessage({
             chat: 2,
             sender: 1,
-            message
+            message,
+            id: talkID
         })
-        let talksQtd = await checkTalkQtd(1)
+        let talksQtd = await checkTalkQtd(2)
         let wasMessageInserted = await checkIfMessageWasInserted(message.content, 1, null)
         expect(result.success).toBe(false)
         expect(result.error?.name).toBe('ERR_CHAT_INVALID')
@@ -158,7 +182,8 @@ describe('sendMessage (c)', () => {
         result = await sendMessage({
             chat: 1,
             sender: 1,
-            message
+            message,
+            id: talkID
         })
         expect(result.success).toBe(false)
         expect(result).toHaveProperty('error')

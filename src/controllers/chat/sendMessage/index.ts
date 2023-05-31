@@ -2,12 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { iAppendedFile, iReturnObject, iSendMessageController } from "../../../@types/myTypes";
 import sendMessage from "../../../services/chat/sendMessage";
 import deleteMedia from "../../../utils/deleteMedia";
-const path = require('path');
-const fs = require('fs');
 
 export default async function sendMessageController(req: Request<{}, {}, iSendMessageController>, res: Response, next: NextFunction) {
     let requestedFile: iAppendedFile | undefined = req.file
-    let { chat, sender, type, content } = req.body
+    let { chat, sender, type, content, talkID, replyTo } = req.body
 
     let serviceResult: iReturnObject = await sendMessage(
         {
@@ -17,7 +15,9 @@ export default async function sendMessageController(req: Request<{}, {}, iSendMe
                 type,
                 content,
                 filename: requestedFile?.filename
-            }
+            },
+            id: talkID,
+            replyTo
         }
     )
 

@@ -16,10 +16,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   tb_talks.init({
+    id: {
+      type: DataTypes.CHAR,
+      primaryKey: true
+    },
     chat: DataTypes.INTEGER,
     sender: DataTypes.INTEGER,
     message: DataTypes.INTEGER,
-    seen: DataTypes.BOOLEAN
+    seen: DataTypes.BOOLEAN,
+    replyTo: DataTypes.CHAR
   }, {
     sequelize,
     modelName: 'tb_talks',
