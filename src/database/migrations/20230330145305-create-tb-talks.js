@@ -6,7 +6,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.CHAR(47)
+        type: Sequelize.STRING(100)
       },
       chat: {
         allowNull: false,
@@ -34,7 +34,7 @@ module.exports = {
       },
       replyTo: {
         allowNull: true,
-        type: Sequelize.CHAR(22)
+        type: Sequelize.STRING(50)
       }
     });
   },
