@@ -157,3 +157,8 @@ export interface iCreateChatController {
     sessionID: number,
     contact: string
 }
+
+export interface iExpireChatProps {
+    chatID: number, 
+    expiredBy: "inactivity" | "user" | "contact"
+}

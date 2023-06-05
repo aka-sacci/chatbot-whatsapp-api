@@ -27,7 +27,6 @@ const testServer = require("../../../src/server")
 
 const path = require('path');
 const fs = require('fs');
-
 describe('sendMessage (c)', () => {
     let talkID = "false_5511997645981@c.us_3EB0C60EB9165BA08FC721"
     let imgTest = path.join(process.cwd(), '/src/mocks/data/media/imageMock.jfif')

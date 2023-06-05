@@ -99,4 +99,49 @@ async function checkIfSessionIsExpired(sessionID: number) {
     return result
 }
 
-export { checkIfSessionIsActive, checkIfChatWasInserted, checkIfChatHistoryWasInserted, checkIfMessageWasInserted, checkTalkQtd, checkIfSessionIsExpired }
+async function checkIfChatWasExpired(chatID: number, expectedStatus: number) {
+    const result = chat
+        .findOne(
+            {
+                where: {
+                    id: chatID
+                }
+            })
+        .then((queryResult: any) => {
+            if (queryResult.status === expectedStatus) {
+                return true
+            } else {
+                return false
+            }
+        })
+    return result
+}
+
+async function checkLastChatHistoryAction(chatID: number, expectedAction: number) {
+    const result = chatHistory
+        .findOne({
+            where: {
+                chat: chatID
+            },
+            order: [['createdAt', 'DESC']]
+        })
+        .then((queryResult: any) => {
+            if (queryResult.action === expectedAction) {
+                return true
+            } else {
+                return false
+            }
+        })
+        return result
+}
+
+export {
+    checkIfSessionIsActive,
+    checkIfChatWasInserted,
+    checkIfChatHistoryWasInserted,
+    checkIfMessageWasInserted,
+    checkTalkQtd,
+    checkIfSessionIsExpired,
+    checkIfChatWasExpired,
+    checkLastChatHistoryAction
+}

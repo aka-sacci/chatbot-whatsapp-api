@@ -1,6 +1,4 @@
-import { where } from "sequelize";
 import { iContactAddress, iContactData, iReturnObject } from "../../../@types/myTypes";
-import { error } from "console";
 const contacts = require('../../../database/models/').tb_contacts
 const contactsAddresses = require('../../../database/models/').tb_contacts_addresses
 

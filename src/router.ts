@@ -11,6 +11,7 @@ import updateContactController from "./controllers/contact/updateContact";
 import checkUserDisponibilityController from "./controllers/chat/checkUserDisponibility";
 import createChatController from "./controllers/chat/createChat";
 import sendMessageController from "./controllers/chat/sendMessage";
+import expireChatController from "./controllers/chat/expireChat";
 //import { iController } from "./@types/myTypes";
 
 
@@ -77,5 +78,7 @@ router.get('/chat/checkuserdisponibility', checkUserDisponibilityController)
 router.post('/chat/createchat', userPhotoUpload.single('userPhoto'), createChatController)
 
 router.post('/chat/sendmessage', talkMediaUpload.single('file'), sendMessageController)
+
+router.get('/chat/expirechat/:chatID/:expiredBy', expireChatController)
 
 exports.router = router
